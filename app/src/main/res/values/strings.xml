@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">HosteleriApp</string>
+    <string name="app_name" translatable="false">HosteleriApp</string>
+    <string name="prefs_file" translatable="false">com.example.hosteleriapp.PREFERENCE_FILE_KEY</string>
+    <string name="request_id_token" translatable="false">301907262057-vgi0usem2k659u2fpojogqa36155armv.apps.googleusercontent.com.apps.googleusercontent.com</string>
+    <string name="correo_electronico">E-Mail</string>
+    <string name="pwd">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

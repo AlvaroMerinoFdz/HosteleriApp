@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "301907262057",
+    "project_id": "hosteleriapp-517a3",
+    "storage_bucket": "hosteleriapp-517a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:301907262057:android:23c0fa2eb580f9f98100f8",
+        "android_client_info": {
+          "package_name": "com.example.hosteleriapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "301907262057-f58354iaklgslf4njjtqpbhst3fb85im.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hosteleriapp",
+            "certificate_hash": "03c5769deb769b841c1be6c1c34289705a96d776"
+          }
+        },
+        {
+          "client_id": "301907262057-vgi0usem2k659u2fpojogqa36155armv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApLVj7ET5vgaFm2ppFCWocmWAHiyCXSnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "301907262057-vgi0usem2k659u2fpojogqa36155armv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

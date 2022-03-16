@@ -1,18 +1,30 @@
 package com.example.hosteleriapp
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.hosteleriapp.Administrador.AdminActivity
 import com.example.hosteleriapp.Bar.BarActivity
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Rol
+import com.example.hosteleriapp.Objetos.Usuario
 import com.example.hosteleriapp.Usuario.UsuarioActivity
 import com.example.hosteleriapp.Utiles.*
+import com.example.hosteleriapp.Utiles.Firebase.crearUsuario
+import com.example.hosteleriapp.Utiles.LogIn.RC_SIGN_IN
+import com.example.hosteleriapp.Utiles.LogIn.showAlert
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +35,7 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private var continuar: Boolean = false
+    public var RC_SIGN_IN = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +82,24 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
             var intentRegistrar = Intent(this, RegistrarActivity::class.java).apply { }
             startActivity(intentRegistrar)
         }
+
+        //Login con google
+        btnLogInGoogle.setOnClickListener {
+            //Configuración
+            val googleConf = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.request_id_token)) //Esto se encuentra en el archivo google-services.json: client->oauth_client -> client_id
+                .requestEmail()
+                .build()
+
+            val googleClient = GoogleSignIn.getClient(
+                this,
+                googleConf
+            ) //Este será el cliente de autenticación de Google.
+            googleClient.signOut() //Con esto salimos de la posible cuenta  de Google que se encuentre logueada.
+            val signInIntent = googleClient.signInIntent
+            startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+        session()
     }
 
     override fun onResume() {
@@ -142,4 +173,53 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
     override fun onNotRecognized() {
         continuar = true
     }
+
+    //******************************** Para la sesión ***************************
+    private fun session() {
+        val prefs: SharedPreferences = getSharedPreferences(
+            getString(R.string.prefs_file),
+            Context.MODE_PRIVATE
+        ) //Aquí no invocamos al edit, es solo para comprobar si tenemos datos en sesión.
+        val email: String? = prefs.getString("email", null)
+        val provider: String? = prefs.getString("provider", null)
+        if (email != null) {
+            irHome()
+        }
+    }
+
+    //*************************************************************************
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Si la respuesta de esta activity se corresponde con la inicializada es que viene de la autenticación de Google.
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d("Alvaro", "firebaseAuthWithGoogle:" + account.id)
+                //Ya tenemos la id de la cuenta. Ahora nos autenticamos con FireBase.
+                if (account != null) {
+                    val credential: AuthCredential =
+                        GoogleAuthProvider.getCredential(account.idToken, null)
+                    FirebaseAuth.getInstance().signInWithCredential(credential)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                //Añadimos el usuario a la BBDD
+
+                                Compartido.usuario =
+                                    Usuario(account.email.toString(), "contraseña", Rol.USUARIO)
+                                crearUsuario(Compartido.usuario)
+                                irHome()
+                            } else {
+                                showAlert(this)
+                            }
+                        }
+                }
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("Alvaro", "Google sign in failed", e)
+                showAlert(this)
+            }
+        }
+    }//fin ActivityResult
 }

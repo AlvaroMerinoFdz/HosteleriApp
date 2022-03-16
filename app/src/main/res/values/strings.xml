@@ -17,4 +17,7 @@
     <string name="cancelar">Cancel</string>
     <string name="biometria_no_disponible">Biometrics not available</string>
     <string name="login_google">Google Login</string>
+    <string name="eliminar">delete</string>
+    <string name="aBar">Convert to Bar</string>
+    <string name="aUsuario">Convert to User</string>
 </resources>

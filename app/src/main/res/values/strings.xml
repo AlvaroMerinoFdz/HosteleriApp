@@ -6,4 +6,14 @@
     <string name="pwd">Password</string>
     <string name="log_in">Log In</string>
     <string name="sign_up">Sign Up</string>
+    <string name="nombre">Name</string>
+    <string name="apellidos">Surnames</string>
+    <string name="huella_no_reconocida">Biometrics not recognized</string>
+    <string name="biometria_disponible">Biometrics available</string>
+    <string name="autenticacion_correcta">Correct authentication</string>
+    <string name="autenticacion">Authentication</string>
+    <string name="introduce_credenciales">Enter your credentials</string>
+    <string name="introduce_huella">Enter your fingerprint</string>
+    <string name="cancelar">Cancel</string>
+    <string name="biometria_no_disponible">Biometrics not available</string>
 </resources>

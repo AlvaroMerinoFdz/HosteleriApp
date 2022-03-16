@@ -5,25 +5,28 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.example.hosteleriapp.Utiles.LogIn
+import com.example.hosteleriapp.Objetos.Compartido
+import com.example.hosteleriapp.Objetos.Rol
+import com.example.hosteleriapp.Utiles.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BiometricAuthCallback {
+
+    private var continuar:Boolean = true
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Compartido.context = this
 
         //Con esto lanzamos eventos personalizados a GoogleAnalytics que podemos ver en nuestra consola de FireBase.
         val analy: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
@@ -41,29 +44,78 @@ class MainActivity : AppCompatActivity() {
                         runBlocking {
                             val job : Job = launch(context = Dispatchers.Default) {
                                 val datos : QuerySnapshot = LogIn.getDataFromFireStore() as QuerySnapshot //Obtenermos la colección
+                                Firebase.obtenerUsuario(datos as QuerySnapshot?, etEmail.text.toString())  //'Destripamos' la colección y la metemos en nuestro ArrayList
                             }
                             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
                             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
                         }
+                        irHome()
                     } else {
-                        showAlert()
+                        LogIn.showAlert(this)
                     }
                 }
             }
         }
         //Registrar
         btnSignUp.setOnClickListener{
-            var intentRegistrar = Intent(this,::class.java).apply {  }
+            var intentRegistrar = Intent(this,RegistrarActivity::class.java).apply {  }
             startActivity(intentRegistrar)
         }
-
     }
-    private fun showAlert(){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        builder.setMessage("Se ha producido un error autenticando al usuario")
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+
+    override fun onResume() {
+        super.onResume()
+        Compartido.context = this
+    }
+
+    private fun irHome(){
+        checkBiometricCapability()
+        showBiometricPrompt()
+
+        if(continuar){
+            if(Compartido.usuario.rol == Rol.ADMIN){
+                /*val homeIntent = Intent(this, AdminActivity::class.java).apply {
+                }
+                startActivity(homeIntent)*/
+            }else if (Compartido.usuario.rol == Rol.USUARIO){
+                /* val homeIntent = Intent(this, UsuariosActivity::class.java).apply {
+                 }
+                 startActivity(homeIntent)*/
+            }else{
+                /* val homeIntent = Intent(this, BarActivity::class.java).apply {
+                 }
+                 startActivity(homeIntent)*/
+            }
+        }else{
+            Toast.makeText(this,getString(R.string.huella_no_reconocida), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    //Métodos necesarios para la biometría.
+    private fun checkBiometricCapability(){
+        if(!BiometricUtilities.isDeviceReady(this)){
+            Toast.makeText(this,getString(R.string.biometria_no_disponible), Toast.LENGTH_SHORT).show()
+            continuar = true
+        }else{
+            Toast.makeText(this,getString(R.string.biometria_disponible), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private  fun showBiometricPrompt(){
+        BiometricUtilities.showPrompt(activity = this, callback = this)
+    }
+
+    //Métodos implementados de la interfaz de la Biometría
+    override fun onSuccess() {
+        Toast.makeText(this,getString(R.string.autenticacion_correcta), Toast.LENGTH_LONG).show()
+        continuar = true
+    }
+
+    override fun onError() {
+        continuar = false
+    }
+
+    override fun onNotRecognized() {
+        continuar = true
     }
 }

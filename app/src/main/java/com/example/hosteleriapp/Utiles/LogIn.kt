@@ -1,5 +1,6 @@
 package com.example.hosteleriapp.Utiles
 
+import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -19,5 +20,14 @@ object LogIn{
         }catch (e : Exception){
             null
         }
+    }
+
+     fun showAlert(context: Context) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Error")
+        builder.setMessage("Se ha producido un error autenticando al usuario")
+        builder.setPositiveButton("Aceptar", null)
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 }

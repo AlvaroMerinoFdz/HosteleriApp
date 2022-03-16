@@ -29,6 +29,7 @@ class RegistrarActivity : AppCompatActivity() {
                         Firebase.crearUsuario(Compartido.usuario)
                         Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG)
                             .show()
+                        finish()
                     } else {
                         LogIn.showAlert(this)
                     }

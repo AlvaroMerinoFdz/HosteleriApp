@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HosteleriApp">
         <activity
+            android:name=".Bar.BarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Usuario.UsuarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Administrador.AdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegistrarActivity"
             android:exported="false" />
         <activity

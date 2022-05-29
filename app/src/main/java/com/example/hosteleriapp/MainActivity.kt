@@ -35,7 +35,8 @@ import kotlinx.coroutines.runBlocking
 class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private var continuar: Boolean = true
-    public var RC_SIGN_IN = 1
+    var RC_SIGN_IN = 1
+    
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,9 +110,8 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private fun irHome() {
         //Aquí tengo que implementar algo para que hasta que no se haga la autenticación el hilo se quede pinchado
-/*
         checkBiometricCapability()
-        showBiometricPrompt()*/
+        showBiometricPrompt()
 
         /*
         runBlocking {
@@ -205,7 +205,6 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 //Añadimos el usuario a la BBDD
-
                                 Compartido.usuario =
                                     Usuario(account.email.toString(), "contraseña", Rol.USUARIO)
                                 crearUsuario(Compartido.usuario)

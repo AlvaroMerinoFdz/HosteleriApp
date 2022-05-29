@@ -55,15 +55,14 @@ object Firebase {
     }
 
     public fun modUsuario(usuario: Usuario) {
-        borrarUsuario(usuario)
         val db = Firebase.firestore
         db.collection("usuarios").document(usuario.correo)
             .set(usuario)
             .addOnSuccessListener {
-                Log.e(ContentValues.TAG, "Usuario añadido")
+                Log.e(ContentValues.TAG, "Usuario modificado")
             }
             .addOnFailureListener { e ->
-                Log.w(ContentValues.TAG, "Error añadiendo usuario", e.cause)
+                Log.w(ContentValues.TAG, "Error modificando usuario", e.cause)
             }
     }
 

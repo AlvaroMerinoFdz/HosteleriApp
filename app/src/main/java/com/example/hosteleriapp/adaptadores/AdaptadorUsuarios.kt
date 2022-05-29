@@ -91,12 +91,17 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
                             })
                         .setNegativeButton(valor,
                             DialogInterface.OnClickListener { dialog, id ->
+                                if(adaptadorUsuarios.usuarios[pos].rol == Rol.BAR){
+                                    adaptadorUsuarios.usuarios[pos].rol = Rol.USUARIO
+                                }else{
+                                    adaptadorUsuarios.usuarios[pos].rol = Rol.BAR
+                                }
                                 modUsuario(adaptadorUsuarios.usuarios[pos])
                             })
-
                     builder.create().show()
                     adaptadorUsuarios.notifyDataSetChanged()
                 })
+
         }
     }
 }

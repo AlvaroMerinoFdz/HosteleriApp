@@ -2,6 +2,12 @@ package com.example.hosteleriapp.Objetos
 
 import java.io.Serializable
 
-data class Usuario(val correo:String, val contraseña:String, var rol:Rol = Rol.USUARIO, var nombre:String? = "", var apellidos:String? = ""):
+open class Usuario(
+    open val correo: String,
+    open val contraseña: String,
+    var rol: Rol = Rol.USUARIO,
+    open var nombre: String? = "",
+    open var apellidos: String? = ""
+) :
     Serializable {
 }

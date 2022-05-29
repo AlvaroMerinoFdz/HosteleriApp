@@ -3,6 +3,7 @@ package com.example.hosteleriapp.Utiles
 import android.content.ContentValues
 import android.util.Log
 import com.example.hosteleriapp.Objetos.Compartido
+import com.example.hosteleriapp.Objetos.Establecimiento
 import com.example.hosteleriapp.Objetos.Rol
 import com.example.hosteleriapp.Objetos.Usuario
 import com.google.firebase.firestore.DocumentChange
@@ -14,7 +15,7 @@ object Firebase {
 
     private val db = Firebase.firestore
 
-     fun crearUsuario(usuario: Usuario) {
+    fun crearUsuario(usuario: Usuario) {
         db.collection("usuarios").document(usuario.correo)
             .set(usuario)
             .addOnSuccessListener {
@@ -25,15 +26,15 @@ object Firebase {
             }
     }
 
-     fun obtenerUsuario(datos: QuerySnapshot?, correo:String) {
-         var miArray : ArrayList<Usuario> = ArrayList()
+    fun obtenerUsuario(datos: QuerySnapshot?, correo: String) {
+        var miArray: ArrayList<Usuario> = ArrayList()
         for (dc: DocumentChange in datos?.documentChanges!!) {
             if (dc.type == DocumentChange.Type.ADDED) {
-                var rolS :String = dc.document.get("rol") as String
+                var rolS: String = dc.document.get("rol") as String
                 var rol = Rol.ADMIN
-                if(rolS == Rol.USUARIO.toString()){
+                if (rolS == Rol.USUARIO.toString()) {
                     rol = Rol.USUARIO
-                }else if (rolS == Rol.BAR.toString()) {
+                } else if (rolS == Rol.BAR.toString()) {
                     rol = Rol.BAR
                 }
                 var usuario = Usuario(
@@ -47,11 +48,11 @@ object Firebase {
                 miArray.add(usuario)
             }
         }
-         for(user in miArray){
-             if(correo == user.correo){
-                 Compartido.usuario = user
-             }
-         }
+        for (user in miArray) {
+            if (correo == user.correo) {
+                Compartido.usuario = user
+            }
+        }
     }
 
     public fun modUsuario(usuario: Usuario) {
@@ -66,23 +67,34 @@ object Firebase {
             }
     }
 
-    public fun borrarUsuario(usuario: Usuario) {
+    fun borrarUsuario(usuario: Usuario) {
         val db = Firebase.firestore
         val TAG = "Alvaro"
+        if (usuario.rol == Rol.BAR) {
+            borrarEstablecimiento(
+                Establecimiento(
+                    usuario.correo,
+                    usuario.contraseña,
+                    usuario.nombre,
+                    usuario.apellidos,
+                    null
+                )
+            )
+        }
         db.collection("usuarios").document(usuario.correo).delete()
             .addOnSuccessListener { Log.d(TAG, "Documento borrado.!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error al borrar el documento.", e) }
     }
 
-     fun obtenerUsuarios(datos: QuerySnapshot?): ArrayList<Usuario> {
-        var usuarios:ArrayList<Usuario> = ArrayList<Usuario>()
+    fun obtenerUsuarios(datos: QuerySnapshot?): ArrayList<Usuario> {
+        var usuarios: ArrayList<Usuario> = ArrayList<Usuario>()
         for (dc: DocumentChange in datos?.documentChanges!!) {
             if (dc.type == DocumentChange.Type.ADDED) {
-                var rolS :String = dc.document.get("rol") as String
+                var rolS: String = dc.document.get("rol") as String
                 var rol = Rol.ADMIN
-                if(rolS == Rol.USUARIO.toString()){
+                if (rolS == Rol.USUARIO.toString()) {
                     rol = Rol.USUARIO
-                }else if (rolS == Rol.BAR.toString()) {
+                } else if (rolS == Rol.BAR.toString()) {
                     rol = Rol.BAR
                 }
                 var usuario = Usuario(
@@ -94,12 +106,33 @@ object Firebase {
                 )
                 Log.e("Alvaro", usuario.toString())
                 Log.e("Alvaro", usuario.toString())
-                if(usuario.rol != Rol.ADMIN){
+                if (usuario.rol != Rol.ADMIN) {
                     usuarios.add(usuario)
                     Compartido.usuarios.add(usuario)
                 }
             }
         }
         return usuarios
+    }
+
+    fun borrarEstablecimiento(usuario: Establecimiento) {
+        val db = Firebase.firestore
+        val TAG = "Alvaro"
+        db.collection("establecimientos").document(usuario.correo).delete()
+            .addOnSuccessListener { Log.d(TAG, "Documento borrado.!") }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error al borrar el documento.", e)
+            }
+    }
+
+    fun crearEstablecimiento(establecimiento: Establecimiento) {
+        db.collection("establecimientos").document(establecimiento.correo)
+            .set(establecimiento)
+            .addOnSuccessListener {
+                Log.e(ContentValues.TAG, "Establecimiento añadido")
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "Error añadiendo establecimiento", e.cause)
+            }
     }
 }

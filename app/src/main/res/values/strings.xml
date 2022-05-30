@@ -20,4 +20,12 @@
     <string name="eliminar">delete</string>
     <string name="aBar">Convert to Bar</string>
     <string name="aUsuario">Convert to User</string>
+    <string name="editar_localizacion">Edit Location</string>
+    <string name="gestionar_carta">Manage menu</string>
+    <string name="ver_comandas">See orders</string>
+    <string name="title_activity_establecimiento">EstablecimientoActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

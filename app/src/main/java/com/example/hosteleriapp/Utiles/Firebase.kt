@@ -134,11 +134,21 @@ object Firebase {
     }
 
     fun obtenerCarta(querySnapshot: QuerySnapshot?, correo: String): ArrayList<Producto> {
-        var a = Producto("a","a","a",3)
-        var b = Producto("b","b","b",3)
+        var a = Producto("bar@gmail.com","a","a",3.0)
+        var b = Producto("bar@gmail.com","b","b",3.0)
         var lista :ArrayList<Producto> = ArrayList()
-        lista.add(a)
-        lista.add(b)
+        lista.add(a);lista.add(b)
         return lista
+    }
+
+    fun addProducto(producto: Producto){
+        db.collection("productos").document(producto.nombre)
+            .set(producto)
+            .addOnSuccessListener {
+                Log.e(ContentValues.TAG, "Producto añadido")
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "Error añadiendo producto", e.cause)
+            }
     }
 }

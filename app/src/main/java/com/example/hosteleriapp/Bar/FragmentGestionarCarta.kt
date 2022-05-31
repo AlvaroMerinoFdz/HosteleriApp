@@ -1,14 +1,17 @@
 package com.example.hosteleriapp.Bar
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hosteleriapp.Administrador.AdminActivity
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
+import com.example.hosteleriapp.RegistrarActivity
 import com.example.hosteleriapp.Utiles.Firebase
 import com.example.hosteleriapp.Utiles.LogIn
 import com.example.hosteleriapp.adaptadores.AdaptadorProductos
@@ -54,5 +57,10 @@ class FragmentGestionarCarta : Fragment() {
         rv_productos.setHasFixedSize(true)
         rv_productos.layoutManager = LinearLayoutManager(Compartido.appCompatActivity)
         rv_productos.adapter = miAdapter
+
+        btnAddProducto.setOnClickListener{
+            var intentAddproducto = Intent(context, AddProductoActivity::class.java).apply { }
+            startActivity(intentAddproducto)
+        }
     }
 }

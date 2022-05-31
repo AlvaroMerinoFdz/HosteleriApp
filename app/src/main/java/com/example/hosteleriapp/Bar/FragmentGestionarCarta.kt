@@ -5,29 +5,39 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hosteleriapp.Objetos.Compartido
+import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
+import com.example.hosteleriapp.Utiles.Firebase
+import com.example.hosteleriapp.Utiles.LogIn
+import com.example.hosteleriapp.adaptadores.AdaptadorProductos
+import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.android.synthetic.main.activity_admin.*
+import kotlinx.android.synthetic.main.fragment_gestionar_carta.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [fragment_gestionar_carta.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FragmentGestionarCarta : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var productos: ArrayList<Producto> = ArrayList()
+    lateinit var miAdapter:AdaptadorProductos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                val datos: QuerySnapshot =
+                    LogIn.getDataFromFireStore() as QuerySnapshot //Obtenermos la colección
+                productos = Firebase.obtenerCarta(datos as QuerySnapshot?,Compartido.usuario.correo)  //'Destripamos' la colección y la metemos en nuestro ArrayList
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
         }
+
+
     }
 
     override fun onCreateView(
@@ -38,23 +48,11 @@ class FragmentGestionarCarta : Fragment() {
         return inflater.inflate(R.layout.fragment_gestionar_carta, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment fragment_gestionar_carta.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentGestionarCarta().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        miAdapter = AdaptadorProductos(productos, Compartido.appCompatActivity)
+        rv_productos.setHasFixedSize(true)
+        rv_productos.layoutManager = LinearLayoutManager(Compartido.appCompatActivity)
+        rv_productos.adapter = miAdapter
     }
 }

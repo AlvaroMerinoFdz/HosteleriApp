@@ -2,10 +2,7 @@ package com.example.hosteleriapp.Utiles
 
 import android.content.ContentValues
 import android.util.Log
-import com.example.hosteleriapp.Objetos.Compartido
-import com.example.hosteleriapp.Objetos.Establecimiento
-import com.example.hosteleriapp.Objetos.Rol
-import com.example.hosteleriapp.Objetos.Usuario
+import com.example.hosteleriapp.Objetos.*
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -134,5 +131,14 @@ object Firebase {
             .addOnFailureListener { e ->
                 Log.w(ContentValues.TAG, "Error añadiendo establecimiento", e.cause)
             }
+    }
+
+    fun obtenerCarta(querySnapshot: QuerySnapshot?, correo: String): ArrayList<Producto> {
+        var a = Producto("a","a","a",3)
+        var b = Producto("b","b","b",3)
+        var lista :ArrayList<Producto> = ArrayList()
+        lista.add(a)
+        lista.add(b)
+        return lista
     }
 }

@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private var continuar: Boolean = true
     var RC_SIGN_IN = 1
-    
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

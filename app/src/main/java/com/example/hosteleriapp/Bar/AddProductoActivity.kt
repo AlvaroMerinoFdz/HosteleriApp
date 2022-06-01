@@ -15,13 +15,17 @@ class AddProductoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_producto)
 
         btnAddProductBBDD.setOnClickListener{
-            var nombre = txtNombreProductoAdd.text.toString()
-            var descripcion = txtDescripcionProductoAdd.text.toString()
-            var precio = txtPrecioProductoAdd.text.toString().toDouble()
-            var producto = Producto(Compartido.usuario.correo, nombre,descripcion,precio)
-            Firebase.addProducto(producto)
-            Toast.makeText(this,R.string.producto_added,Toast.LENGTH_LONG).show()
-            onBackPressed()
+            if(txtNombreProductoAdd.text.isNotEmpty() && txtDescripcionProductoAdd.text.isNotEmpty() && txtPrecioProductoAdd.text.isNotEmpty()){
+                var nombre = txtNombreProductoAdd.text.toString()
+                var descripcion = txtDescripcionProductoAdd.text.toString()
+                var precio = txtPrecioProductoAdd.text.toString().toDouble()
+                var producto = Producto(Compartido.usuario.correo, nombre,descripcion,precio)
+                Firebase.addProducto(producto)
+                Toast.makeText(this,R.string.producto_added,Toast.LENGTH_LONG).show()
+                onBackPressed()
+            }else{
+                Toast.makeText(this,R.string.product_failed,Toast.LENGTH_LONG).show()
+            }
         }
 
         btnCancelAddProductBBDD.setOnClickListener {

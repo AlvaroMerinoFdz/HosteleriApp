@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HosteleriApp">
         <activity
+            android:name=".Bar.EditarProductoActivity"
+            android:exported="false" />
+        <activity
             android:name=".Bar.AddProductoActivity"
             android:exported="false" />
         <activity

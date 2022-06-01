@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.hosteleriapp.Objetos.Compartido
@@ -21,6 +22,7 @@ class BarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bar)
         Compartido.appCompatActivity = this
+        Toast.makeText(this,Compartido.usuario.correo,Toast.LENGTH_LONG).show()
 
         fragmentGestionarCarta = FragmentGestionarCarta()
         fragmentGestionarComandas = FragmentGestionarComandas()

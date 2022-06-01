@@ -3,10 +3,17 @@ package com.example.hosteleriapp.Utiles
 import android.content.ContentValues
 import android.util.Log
 import com.example.hosteleriapp.Objetos.*
+import com.example.hosteleriapp.Utiles.LogIn.getDataFromFireStore
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 
 object Firebase {
 
@@ -133,22 +140,64 @@ object Firebase {
             }
     }
 
-    fun obtenerCarta(querySnapshot: QuerySnapshot?, correo: String): ArrayList<Producto> {
-        var a = Producto("bar@gmail.com","a","a",3.0)
-        var b = Producto("bar@gmail.com","b","b",3.0)
-        var lista :ArrayList<Producto> = ArrayList()
-        lista.add(a);lista.add(b)
-        return lista
+    fun obtenerCarta(correo: String): ArrayList<Producto> {
+        var productos :ArrayList<Producto> = ArrayList()
+        var datos: QuerySnapshot? = null
+
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+         datos=
+            getDataFromFireStore("productos") as QuerySnapshot //Obtenermos la colección
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+        }
+
+
+        for (dc: DocumentChange in datos?.documentChanges!!) {
+            if (dc.type == DocumentChange.Type.ADDED) {
+                var producto = Producto(
+                    dc.document.get("correo")as String,
+                    dc.document.get("nombre")as String,
+                    dc.document.get("descripcion") as String,
+                    dc.document.get("precio") as Double
+                )
+                Log.e("Alvaro", producto.toString())
+                productos.add(producto)
+            }
+        }
+        return productos
+    }
+    private suspend fun getDataFromFireStore(coleccion:String): QuerySnapshot?{
+        return try{
+            val data = db.collection(coleccion)
+                .get()
+                .await()
+            data
+        }catch (e : Exception){
+            null
+        }
     }
 
+
     fun addProducto(producto: Producto){
-        db.collection("productos").document(producto.nombre)
+        db.collection("productos").document(producto.nombre + producto.correo)
             .set(producto)
             .addOnSuccessListener {
                 Log.e(ContentValues.TAG, "Producto añadido")
             }
             .addOnFailureListener { e ->
                 Log.w(ContentValues.TAG, "Error añadiendo producto", e.cause)
+            }
+    }
+
+    fun borrarProducto(producto: Producto) {
+        val db = Firebase.firestore
+        val TAG = "Alvaro"
+        db.collection("productos").document(producto.nombre + producto.correo).delete()
+            .addOnSuccessListener { Log.d(TAG, "Producto borrado.!") }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error al borrar el producto.", e)
             }
     }
 }

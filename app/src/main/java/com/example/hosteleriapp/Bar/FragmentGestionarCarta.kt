@@ -32,9 +32,7 @@ class FragmentGestionarCarta : Fragment() {
 
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
-                val datos: QuerySnapshot =
-                    LogIn.getDataFromFireStore() as QuerySnapshot //Obtenermos la colección
-                productos = Firebase.obtenerCarta(datos as QuerySnapshot?,Compartido.usuario.correo)  //'Destripamos' la colección y la metemos en nuestro ArrayList
+                productos = Firebase.obtenerCarta(Compartido.usuario.correo)  //'Destripamos' la colección y la metemos en nuestro ArrayList
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
@@ -62,5 +60,21 @@ class FragmentGestionarCarta : Fragment() {
             var intentAddproducto = Intent(context, AddProductoActivity::class.java).apply { }
             startActivity(intentAddproducto)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                productos = Firebase.obtenerCarta(Compartido.usuario.correo)  //'Destripamos' la colección y la metemos en nuestro ArrayList
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+        }
+        miAdapter = AdaptadorProductos(productos, Compartido.appCompatActivity)
+        rv_productos.setHasFixedSize(true)
+        rv_productos.layoutManager = LinearLayoutManager(Compartido.appCompatActivity)
+        rv_productos.adapter = miAdapter
     }
 }

@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private var continuar: Boolean = true
     var RC_SIGN_IN = 1
-    
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,8 +109,8 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private fun irHome() {
         //Aquí tengo que implementar algo para que hasta que no se haga la autenticación el hilo se quede pinchado
-        checkBiometricCapability()
-        showBiometricPrompt()
+       /* checkBiometricCapability()
+        showBiometricPrompt()*/
 
         /*
         runBlocking {

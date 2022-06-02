@@ -9,10 +9,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hosteleriapp.Objetos.Establecimiento
 import com.example.hosteleriapp.Objetos.Rol
 import com.example.hosteleriapp.Objetos.Usuario
 import com.example.hosteleriapp.R
+import com.example.hosteleriapp.Utiles.Firebase.borrarEstablecimiento
 import com.example.hosteleriapp.Utiles.Firebase.borrarUsuario
+import com.example.hosteleriapp.Utiles.Firebase.crearEstablecimiento
 import com.example.hosteleriapp.Utiles.Firebase.modUsuario
 
 
@@ -32,7 +35,7 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val usuario = usuarios[position]
         holder.correo.text = usuario.correo
-        holder.bind(usuario, context, position, this)
+        holder.bind(usuario, context, position, this,usuarios)
     }
 
     override fun getItemCount(): Int {
@@ -57,7 +60,8 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
             usuario: Usuario,
             context: AppCompatActivity,
             pos: Int,
-            adaptadorUsuarios: AdaptadorUsuarios
+            adaptadorUsuarios: AdaptadorUsuarios,
+            usuarios:ArrayList<Usuario>
         ) {
             with(correo) {
                 if (usuario.rol == Rol.USUARIO) {
@@ -86,15 +90,34 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
                     builder.setMessage("Opciones del usuario")
                         .setPositiveButton(R.string.eliminar,
                             DialogInterface.OnClickListener { dialog, id ->
-                                //eliminamos el usuario
+                                //eliminamos el usuario de la BBDD
                                 borrarUsuario(adaptadorUsuarios.usuarios[pos])
+                                //Lo eliminamos también de la lista del adapter.
+                                usuarios.remove(adaptadorUsuarios.usuarios[pos])
+                                adaptadorUsuarios.notifyDataSetChanged()
                             })
                         .setNegativeButton(valor,
                             DialogInterface.OnClickListener { dialog, id ->
-                                if(adaptadorUsuarios.usuarios[pos].rol == Rol.BAR){
+                                if (adaptadorUsuarios.usuarios[pos].rol == Rol.BAR) {
                                     adaptadorUsuarios.usuarios[pos].rol = Rol.USUARIO
-                                }else{
+                                    borrarEstablecimiento(
+                                        Establecimiento(
+                                            adaptadorUsuarios.usuarios[pos].correo,
+                                            adaptadorUsuarios.usuarios[pos].contraseña,
+                                            adaptadorUsuarios.usuarios[pos].nombre,
+                                            adaptadorUsuarios.usuarios[pos].apellidos,
+                                            null
+                                        )
+                                    )    } else {
                                     adaptadorUsuarios.usuarios[pos].rol = Rol.BAR
+                                    var establecimiento = Establecimiento(
+                                        correo = adaptadorUsuarios.usuarios[pos].correo,
+                                        contraseña = adaptadorUsuarios.usuarios[pos].contraseña,
+                                        nombre = adaptadorUsuarios.usuarios[pos].nombre,
+                                        apellidos = adaptadorUsuarios.usuarios[pos].apellidos,
+                                        ubicacion = null
+                                    )
+                                    crearEstablecimiento(establecimiento)
                                 }
                                 modUsuario(adaptadorUsuarios.usuarios[pos])
                             })
@@ -103,5 +126,6 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
                 })
 
         }
+
     }
 }

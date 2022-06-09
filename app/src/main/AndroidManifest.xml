@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HosteleriApp">
         <activity
+            android:name=".User.EditarUsuarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".Bar.EditarProductoActivity"
             android:exported="false" />
         <activity
@@ -21,7 +24,7 @@
             android:name=".Bar.BarActivity"
             android:exported="false" />
         <activity
-            android:name=".Usuario.UsuarioActivity"
+            android:name=".User.UsuarioActivity"
             android:exported="false" />
         <activity
             android:name=".Administrador.AdminActivity"
@@ -38,6 +41,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 
 </manifest>

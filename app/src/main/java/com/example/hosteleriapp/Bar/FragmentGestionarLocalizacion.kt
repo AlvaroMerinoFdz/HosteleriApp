@@ -32,6 +32,11 @@ class FragmentGestionarLocalizacion : Fragment(), OnMapReadyCallback {
         binding = FragmentGestionarLocalizacionBinding.inflate(layoutInflater)
 
     }
+    /*
+      override fun onMapLongClick(p0: LatLng) {
+        map.addMarker(MarkerOptions().position(p0!!).title("Nuevo marcador"))
+    }
+    */
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

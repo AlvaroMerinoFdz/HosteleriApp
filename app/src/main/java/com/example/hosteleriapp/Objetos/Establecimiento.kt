@@ -1,5 +1,6 @@
 package com.example.hosteleriapp.Objetos
 
+import com.google.android.gms.maps.model.LatLng
 import java.io.Serializable
 
 class Establecimiento(
@@ -7,12 +8,12 @@ class Establecimiento(
     contraseña: String,
     nombre: String? = "",
     apellidos: String? = "",
-    ubicacion: Ubicacion?
+    ubicacion: LatLng?
 ) : Usuario(correo, contraseña, Rol.BAR, nombre, apellidos), Serializable {
 
     override var correo: String = correo
     override var contraseña: String = contraseña
     override var nombre: String? = nombre
     override var apellidos: String? = apellidos
-    var ubicacion: Ubicacion? = ubicacion
+    var ubicacion: LatLng? = ubicacion
 }

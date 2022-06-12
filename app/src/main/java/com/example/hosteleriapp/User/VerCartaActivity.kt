@@ -7,10 +7,8 @@ import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
-import com.example.hosteleriapp.adaptadores.AdaptadorProductos
 import com.example.hosteleriapp.adaptadores.AdaptadorVerCarta
 import kotlinx.android.synthetic.main.activity_ver_carta.*
-import kotlinx.android.synthetic.main.fragment_gestionar_carta.*
 
 class VerCartaActivity : AppCompatActivity() {
 
@@ -20,11 +18,11 @@ class VerCartaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_carta)
 
-        productos = Firebase.obtenerCarta("bar@gmail.com")
+        productos = Firebase.obtenerCarta(Compartido.establecimiento.correo)
 
         miAdapter = AdaptadorVerCarta(productos, this)
-        rv_ver_carta.setHasFixedSize(true)
-        rv_ver_carta.layoutManager = LinearLayoutManager(this)
-        rv_ver_carta.adapter = miAdapter
+        rv_productos.setHasFixedSize(true)
+        rv_productos.layoutManager = LinearLayoutManager(this)
+        rv_productos.adapter = miAdapter
     }
 }

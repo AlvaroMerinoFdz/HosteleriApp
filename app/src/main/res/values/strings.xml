@@ -49,4 +49,6 @@
     <string name="editar_usuario">Edit User</string>
     <string name="usuario_editado">User edited Correctly</string>
     <string name="edit_user">Edit user</string>
+    <string name="realizar_pedido">Make an order</string>
+    <string name="numero_mesa">table number</string>
 </resources>

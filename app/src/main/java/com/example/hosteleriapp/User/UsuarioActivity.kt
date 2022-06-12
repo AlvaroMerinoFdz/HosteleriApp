@@ -3,32 +3,29 @@ package com.example.hosteleriapp.User
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Establecimiento
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
-import com.example.hosteleriapp.Utiles.LogIn
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -40,6 +37,7 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
     private val LOCATION_REQUEST_CODE: Int = 0
     private lateinit var map: GoogleMap
     private var ubicacion: Location? = null
+    private var establecimientos: ArrayList<Establecimiento> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,10 +96,10 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
      */
     private fun createMarker() {
         //map.addMarker(MarkerOptions().position(markerCIFP).title("Mi CIFP favorito!"))
-        var establecimientos: ArrayList<Establecimiento> = ArrayList()
+        establecimientos.clear()
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
-                var datos =
+                val datos =
                     Firebase.getDataFromFireStore("establecimientos") as QuerySnapshot //Obtenermos la colección
                 establecimientos =
                     Firebase.getEstablecimientos(datos as QuerySnapshot?)  //'Destripamos' la colección y la metemos en nuestro ArrayList
@@ -205,7 +203,7 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onMyLocationClick(p0: Location) {
         Toast.makeText(this, "Estás en ${p0.latitude}, ${p0.longitude}", Toast.LENGTH_SHORT).show()
 
-        //Firebase.crearEstablecimiento(Establecimiento("bar@gmail.com","12345678","Bar","Mi Casa",LatLng(p0.latitude+0.1,p0.longitude+0.1)))
+        //Firebase.crearEstablecimiento(Establecimiento("santi@gmail.com","12345678","bar","santi",LatLng(p0.latitude+0.0005,p0.longitude+0.0005)))
     }
 
 
@@ -218,19 +216,43 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onMarkerClick(p0: Marker): Boolean {
-        var localizacionEstablecimiento:Location = Location("")
+        val localizacionEstablecimiento = Location("")
         localizacionEstablecimiento.longitude = p0.position.longitude
         localizacionEstablecimiento.latitude = p0.position.latitude
+        val establecimiento: Establecimiento? = comprobarLocalizacion(localizacionEstablecimiento)
+        if (establecimiento != null) {
+            Compartido.establecimiento = establecimiento
+        }
         val distanciaEnMetros = localizacionEstablecimiento.distanceTo(ubicacion)
-        if(distanciaEnMetros>100){
+        if (distanciaEnMetros > 100) {
 
-            Toast.makeText(this, "Demasiado lejos, pero puedes ver la carta", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Demasiado lejos, pero puedes ver la carta", Toast.LENGTH_SHORT)
+                .show()
             val verCartaIntent = Intent(this, VerCartaActivity::class.java).apply {
             }
             startActivity(verCartaIntent)
+        } else {
+            val realizarComandaIntent = Intent(this, RealizarComandaActivity::class.java).apply {
+            }
+            startActivity(realizarComandaIntent)
         }
 
         return true
+    }
+
+    /**
+     * Con este método obtenemos el establecimiento en el que hemos pinchado
+     */
+    private fun comprobarLocalizacion(localizacionEstablecimiento: Location): Establecimiento? {
+        val ubicacionEstablecimiento =
+            LatLng(localizacionEstablecimiento.latitude, localizacionEstablecimiento.longitude)
+        var seleccionado: Establecimiento? = null
+        for (establecimiento in establecimientos) {
+            if (establecimiento.ubicacion!! == ubicacionEstablecimiento) {
+                seleccionado = establecimiento
+            }
+        }
+        return seleccionado
     }
 
 }

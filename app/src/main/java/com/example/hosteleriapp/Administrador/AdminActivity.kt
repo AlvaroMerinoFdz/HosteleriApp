@@ -18,29 +18,27 @@ import kotlinx.coroutines.runBlocking
 
 class AdminActivity : AppCompatActivity() {
 
-    private var usuarios:ArrayList<Usuario> = ArrayList()
-    lateinit var miAdapter : AdaptadorUsuarios
+    private var usuarios: ArrayList<Usuario> = ArrayList()
+    lateinit var miAdapter: AdaptadorUsuarios
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
-
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
                 val datos: QuerySnapshot =
                     getDataFromFireStore() as QuerySnapshot //Obtenermos la colección
-                usuarios = obtenerUsuarios(datos as QuerySnapshot?)  //'Destripamos' la colección y la metemos en nuestro ArrayList
+                usuarios =
+                    obtenerUsuarios(datos as QuerySnapshot?)  //'Destripamos' la colección y la metemos en nuestro ArrayList
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
         }
 
-        miAdapter = AdaptadorUsuarios(usuarios,this)
+        miAdapter = AdaptadorUsuarios(usuarios, this)
         rvUsuarios.setHasFixedSize(true)
         rvUsuarios.layoutManager = LinearLayoutManager(this)
         rvUsuarios.adapter = miAdapter
-
-
     }
 
     override fun onResume() {
@@ -50,13 +48,14 @@ class AdminActivity : AppCompatActivity() {
             val job: Job = launch(context = Dispatchers.Default) {
                 val datos: QuerySnapshot =
                     getDataFromFireStore() as QuerySnapshot //Obtenermos la colección
-                usuarios = obtenerUsuarios(datos as QuerySnapshot?)  //'Destripamos' la colección y la metemos en nuestro ArrayList
+                usuarios =
+                    obtenerUsuarios(datos as QuerySnapshot?)  //'Destripamos' la colección y la metemos en nuestro ArrayList
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
         }
 
-        miAdapter = AdaptadorUsuarios(usuarios,this)
+        miAdapter = AdaptadorUsuarios(usuarios, this)
         rvUsuarios.setHasFixedSize(true)
         rvUsuarios.layoutManager = LinearLayoutManager(this)
         rvUsuarios.adapter = miAdapter

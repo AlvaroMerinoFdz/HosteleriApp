@@ -19,13 +19,15 @@ class RegistrarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_registrar)
 
         btnSignUpRegistrar.setOnClickListener {
-            if (etEmailRegistrar.text.isNotEmpty() && etPwdRegistrar.text.isNotEmpty() && etNombreRegistrar.text.isNotEmpty() && etApellidosRegistrar.text.isNotEmpty()) {
+            if (etEmailRegistrar.text.isNotEmpty() && etPwdRegistrar.text.isNotEmpty() &&
+                etNombreRegistrar.text.isNotEmpty() && etApellidosRegistrar.text.isNotEmpty()) {
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                     etEmailRegistrar.text.toString(),
                     etPwdRegistrar.text.toString()
                 ).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Compartido.usuario = Usuario(etEmailRegistrar.text.toString(), etPwdRegistrar.text.toString(), Rol.USUARIO, etNombreRegistrar.text.toString(), etApellidosRegistrar.text.toString())
+                        Compartido.usuario = Usuario(etEmailRegistrar.text.toString(), etPwdRegistrar.text.toString(),
+                            Rol.USUARIO, etNombreRegistrar.text.toString(), etApellidosRegistrar.text.toString())
                         Firebase.crearUsuario(Compartido.usuario)
                         Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG)
                             .show()
@@ -37,6 +39,4 @@ class RegistrarActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

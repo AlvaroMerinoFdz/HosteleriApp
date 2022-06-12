@@ -23,25 +23,20 @@ import androidx.core.content.ContextCompat
 import com.example.hosteleriapp.Objetos.Establecimiento
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
+import com.example.hosteleriapp.Utiles.LogIn
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-/**
- * Implementamos:
- * GoogleMap.OnMyLocationButtonClickListener --> Dispara el evento al pulsar en el punto negro arriba a la derecha que centra el mapa en la localización acual.
- * GoogleMap.OnMyLocationClickListener --> Dispara el evento al pulsar en la localización actual, punto azul.
- * GoogleMap.OnPoiClickListener --> Dispara el evento al pulsar en puntos de interés (POI).
- * GoogleMap.OnMapLongClickListener --> Lanza el evento al pulsar en cualquier parte del mapa.
- * GoogleMap.OnMarkerClickListener --> Dispara el evento al hacer click en un marcador.
- */
-class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationClickListener, GoogleMap.OnMarkerClickListener {
+class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
+    GoogleMap.OnMyLocationClickListener, GoogleMap.OnMarkerClickListener {
     private val LOCATION_REQUEST_CODE: Int = 0
     private lateinit var map: GoogleMap
     private var ubicacion: Location? = null
@@ -52,18 +47,21 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyL
         createMapFragment()
 
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.ubicacion_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.opcSatelite -> map.mapType = GoogleMap.MAP_TYPE_SATELLITE
-            R.id.opcNormal ->  map.mapType = GoogleMap.MAP_TYPE_NORMAL
-            R.id.opcHibrido ->  map.mapType = GoogleMap.MAP_TYPE_HYBRID
-            R.id.opcTerreno ->  map.mapType = GoogleMap.MAP_TYPE_TERRAIN
-            R.id.opcEditarUsuario ->{
+        when (item.itemId) {
+            R.id.opcSatelite -> {
+                map.mapType = GoogleMap.MAP_TYPE_SATELLITE
+            };R.id.opcNormal -> {
+            map.mapType = GoogleMap.MAP_TYPE_NORMAL
+        };R.id.opcHibrido -> map.mapType = GoogleMap.MAP_TYPE_HYBRID
+            R.id.opcTerreno -> map.mapType = GoogleMap.MAP_TYPE_TERRAIN
+            R.id.opcEditarUsuario -> {
                 val editarIntent = Intent(this, EditarUsuarioActivity::class.java).apply {
                 }
                 startActivity(editarIntent)
@@ -76,20 +74,14 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyL
         map = googleMap
         enableMyLocation() //--> Habilita, pidiendo permisos, la localización actual.
         runBlocking {
-            val job : Job = launch(context = Dispatchers.Default){
+            val job: Job = launch(context = Dispatchers.Default) {
                 localizarMiUbicacion()
             }
             job.join()
         }
-
-
         map.setOnMyLocationClickListener(this)
         map.setOnMarkerClickListener(this)
-
         createMarker() //--> Nos coloca varios marcadores en el mapa y nos coloca en el CIFP Virgen de Gracia con un Zoom.
-
-//        pintarRutaAlCentro()
-//
     }
 
     /**
@@ -105,16 +97,28 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyL
      * Método en el que crearemos algunos marcadores de ejemplo.
      */
     private fun createMarker() {
-        /*
-        Los markers se crean de una forma muy sencilla, basta con crear una instancia de un objeto LatLng() que recibirá dos
-        parámetros, la latitud y la longitud. Yo en este ejemplo he puesto las coordenadas de mi playa favorita.
-        */
         //map.addMarker(MarkerOptions().position(markerCIFP).title("Mi CIFP favorito!"))
+        var establecimientos: ArrayList<Establecimiento> = ArrayList()
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                var datos =
+                    Firebase.getDataFromFireStore("establecimientos") as QuerySnapshot //Obtenermos la colección
+                establecimientos =
+                    Firebase.getEstablecimientos(datos as QuerySnapshot?)  //'Destripamos' la colección y la metemos en nuestro ArrayList
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+        }
+        for (establecimiento in establecimientos) {
+            establecimiento.ubicacion?.let {
+                MarkerOptions().position(it)
+                    .title(establecimiento.nombre + " " + establecimiento.apellidos)
+            }
+                ?.let { map.addMarker(it) }
 
-        //Esto la mueve sin efecto zoom.
-        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(markerCIFP, 18f))
+            establecimiento.ubicacion?.let { pintarCirculoCentro(it) }
+        }
     }
-
 
 
     /**
@@ -160,13 +164,18 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyL
      * Método que solicita los permisos.
      */
     private fun requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
             Toast.makeText(this, "Ve a ajustes y acepta los permisos", Toast.LENGTH_SHORT).show()
         } else {
-            ActivityCompat.requestPermissions(this,
+            ActivityCompat.requestPermissions(
+                this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_REQUEST_CODE)
+                LOCATION_REQUEST_CODE
+            )
         }
     }
 
@@ -176,11 +185,15 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyL
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when(requestCode){
-            REQUEST_CODE_LOCATION -> if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+        when (requestCode) {
+            REQUEST_CODE_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 map.isMyLocationEnabled = true
-            }else{
-                Toast.makeText(this, "Para activar la localización ve a ajustes y acepta los permisos", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Para activar la localización ve a ajustes y acepta los permisos",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             else -> {}
         }
@@ -196,8 +209,8 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyL
     }
 
 
-    private fun pintarCirculoCentro(miUbicacion:LatLng) {
-        map.addCircle(CircleOptions().run{
+    private fun pintarCirculoCentro(miUbicacion: LatLng) {
+        map.addCircle(CircleOptions().run {
             center(miUbicacion)
             radius(100.0)
             strokeColor(Color.GREEN)

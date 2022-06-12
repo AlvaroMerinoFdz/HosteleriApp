@@ -9,4 +9,6 @@ object Compartido {
     public var usuarios: ArrayList<Usuario> = ArrayList()
     lateinit var context: Context
     lateinit var appCompatActivity: AppCompatActivity
+    lateinit var establecimiento: Establecimiento
+    var vectorComanda:ArrayList<Pedido> = ArrayList()
 }

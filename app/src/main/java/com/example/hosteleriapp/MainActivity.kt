@@ -7,16 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.example.hosteleriapp.User.UsuarioActivity
 import com.example.hosteleriapp.Administrador.AdminActivity
 import com.example.hosteleriapp.Bar.BarActivity
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Rol
 import com.example.hosteleriapp.Objetos.Usuario
-import com.example.hosteleriapp.Usuario.UsuarioActivity
 import com.example.hosteleriapp.Utiles.*
 import com.example.hosteleriapp.Utiles.Firebase.crearUsuario
-import com.example.hosteleriapp.Utiles.LogIn.RC_SIGN_IN
 import com.example.hosteleriapp.Utiles.LogIn.showAlert
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -121,7 +119,6 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
             job.join()
         }
          */
-
 
         //Si continuar = true, iniciará una ventana según su Rol, sino mostrará un mensaje por pantalla
         if (continuar) {

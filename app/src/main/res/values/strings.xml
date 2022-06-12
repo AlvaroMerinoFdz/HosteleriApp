@@ -42,4 +42,13 @@
     <string name="producto_deleted">Producto deleted correctly</string>
     <string name="producto_edited">Product edited correctly</string>
     <string name="product_failed">All the camps have to be completed</string>
+    <string name="sat_lite">Satélite</string>
+    <string name="normal">Normal</string>
+    <string name="Hibrid">Híbrido</string>
+    <string name="terreno">Terrain</string>
+    <string name="editar_usuario">Edit User</string>
+    <string name="usuario_editado">User edited Correctly</string>
+    <string name="edit_user">Edit user</string>
+    <string name="realizar_pedido">Make an order</string>
+    <string name="numero_mesa">table number</string>
 </resources>

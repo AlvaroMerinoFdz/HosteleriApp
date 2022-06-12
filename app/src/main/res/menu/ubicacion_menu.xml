@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/opcSatelite"
+        android:title="@string/sat_lite"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/opcNormal"
+        android:title="@string/normal"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/opcHibrido"
+        android:title="@string/Hibrid"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/opcTerreno"
+        android:title="@string/terreno"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/opcEditarUsuario"
+        android:title="@string/editar_usuario"
+        app:showAsAction="never" />
+</menu>

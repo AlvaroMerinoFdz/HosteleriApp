@@ -218,7 +218,18 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onMarkerClick(p0: Marker): Boolean {
-        Toast.makeText(this, "Estás en ${p0!!.title}, ${p0!!.position}", Toast.LENGTH_SHORT).show()
+        var localizacionEstablecimiento:Location = Location("")
+        localizacionEstablecimiento.longitude = p0.position.longitude
+        localizacionEstablecimiento.latitude = p0.position.latitude
+        val distanciaEnMetros = localizacionEstablecimiento.distanceTo(ubicacion)
+        if(distanciaEnMetros>100){
+
+            Toast.makeText(this, "Demasiado lejos, pero puedes ver la carta", Toast.LENGTH_SHORT).show()
+            val verCartaIntent = Intent(this, VerCartaActivity::class.java).apply {
+            }
+            startActivity(verCartaIntent)
+        }
+
         return true
     }
 

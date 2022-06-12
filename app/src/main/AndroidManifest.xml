@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HosteleriApp">
         <activity
+            android:name=".User.RealizarComandaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".User.VerCartaActivity"
+            android:exported="false" />
+        <activity
             android:name=".User.EditarUsuarioActivity"
             android:exported="false" />
         <activity

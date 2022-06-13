@@ -142,13 +142,17 @@ object Firebase {
     }
 
     fun obtenerCarta(correo: String): ArrayList<Producto> {
-        var productos :ArrayList<Producto> = ArrayList()
+        var productos: ArrayList<Producto> = ArrayList()
         var datos: QuerySnapshot? = null
 
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
-         datos=
-            getDataFromFireStore("productos",correo) as QuerySnapshot //Obtenermos la colección
+                datos =
+                    getDataFromFireStore(
+                        "productos",
+                        "correo",
+                        correo
+                    ) as QuerySnapshot //Obtenermos la colección
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
@@ -157,8 +161,8 @@ object Firebase {
         for (dc: DocumentChange in datos?.documentChanges!!) {
             if (dc.type == DocumentChange.Type.ADDED) {
                 var producto = Producto(
-                    dc.document.get("correo")as String,
-                    dc.document.get("nombre")as String,
+                    dc.document.get("correo") as String,
+                    dc.document.get("nombre") as String,
                     dc.document.get("descripcion") as String,
                     dc.document.get("precio") as Double
                 )
@@ -168,29 +172,35 @@ object Firebase {
         }
         return productos
     }
-    suspend fun getDataFromFireStore(coleccion:String): QuerySnapshot?{
-        return try{
+
+    suspend fun getDataFromFireStore(coleccion: String): QuerySnapshot? {
+        return try {
             val data = db.collection(coleccion)
                 .get()
                 .await()
             data
-        }catch (e : Exception){
+        } catch (e: Exception) {
             null
         }
     }
-    suspend fun getDataFromFireStore(coleccion:String,nombreCampo:String): QuerySnapshot?{
-        return try{
-            val data = db.collection(coleccion).whereEqualTo("correo",nombreCampo)
+
+    suspend fun getDataFromFireStore(
+        coleccion: String,
+        nombreCampo: String,
+        valorCampo: String
+    ): QuerySnapshot? {
+        return try {
+            val data = db.collection(coleccion).whereEqualTo(nombreCampo, valorCampo)
                 .get()
                 .await()
             data
-        }catch (e : Exception){
+        } catch (e: Exception) {
             null
         }
     }
 
 
-    fun addProducto(producto: Producto){
+    fun addProducto(producto: Producto) {
         db.collection("productos").document(producto.nombre + producto.correo)
             .set(producto)
             .addOnSuccessListener {
@@ -213,31 +223,33 @@ object Firebase {
 
     fun getEstablecimientos(datos: QuerySnapshot?): ArrayList<Establecimiento> {
         var establecimientos: ArrayList<Establecimiento> = ArrayList()
-        var ubicacion:LatLng? = null
+        var ubicacion: LatLng? = null
         for (dc: DocumentChange in datos?.documentChanges!!) {
             if (dc.type == DocumentChange.Type.ADDED) {
-                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?,Double?>?
+                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?, Double?>?
 
                 if (objetoRecibido != null) {
-                    ubicacion= LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
+                    ubicacion =
+                        LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
                 }
-                    var establecimiento = Establecimiento(
-                        dc.document.get("correo").toString(),
-                        dc.document.get("contraseña").toString(),
-                        dc.document.get("nombre") as String,
-                        dc.document.get("apellidos") as String,ubicacion)
-                    Log.e("Alvaro", establecimiento.toString())
-                    Log.e("Alvaro", establecimiento.toString())
-                    if(establecimiento.ubicacion != null){
-                        establecimientos.add(establecimiento)
-                    }
+                var establecimiento = Establecimiento(
+                    dc.document.get("correo").toString(),
+                    dc.document.get("contraseña").toString(),
+                    dc.document.get("nombre") as String,
+                    dc.document.get("apellidos") as String, ubicacion
+                )
+                Log.e("Alvaro", establecimiento.toString())
+                Log.e("Alvaro", establecimiento.toString())
+                if (establecimiento.ubicacion != null) {
+                    establecimientos.add(establecimiento)
                 }
+            }
         }
         return establecimientos
     }
 
     fun crearPedido(comanda: Comanda) {
-        db.collection("comandas").document(comanda.mesa.toString())
+        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento   )
             .set(comanda)
             .addOnSuccessListener {
                 Log.e(ContentValues.TAG, "Comanda añadido")
@@ -245,5 +257,38 @@ object Firebase {
             .addOnFailureListener { e ->
                 Log.w(ContentValues.TAG, "Error añadiendo Comanda", e.cause)
             }
+    }
+
+    fun obtenerComandas(correo: String): ArrayList<Comanda> {
+        var comandas: ArrayList<Comanda> = ArrayList()
+        var datos: QuerySnapshot? = null
+
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                datos =
+                    getDataFromFireStore(
+                        "comandas",
+                        "establecimiento",
+                        correo
+                    ) as QuerySnapshot //Obtenermos la colección
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+        }
+
+        for (dc: DocumentChange in datos?.documentChanges!!) {
+            if (dc.type == DocumentChange.Type.ADDED) {
+                var mesa = dc.document.get("mesa") as Long
+                var comanda = Comanda(
+                    dc.document.get("cliente") as String, mesa.toInt(),
+                    dc.document.get("pedidos") as ArrayList<String>,
+                    dc.document.get("establecimiento") as String,
+                    dc.document.get("precio") as Double,
+                    dc.document.get("completado") as Boolean
+                )
+                comandas.add(comanda)
+            }
+        }
+        return comandas
     }
 }

@@ -3,5 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foreground="@drawable/common_google_signin_btn_icon_light"
-    tools:context=".Bar.FragmentGestionarComandas" />
+    tools:context=".Bar.FragmentGestionarComandas" >
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_gestionar_comandas"
+        android:layout_width="380dp"
+        android:layout_height="656dp" />
+</FrameLayout>

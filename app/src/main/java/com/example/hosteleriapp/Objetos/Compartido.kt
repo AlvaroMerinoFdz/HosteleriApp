@@ -10,5 +10,6 @@ object Compartido {
     lateinit var context: Context
     lateinit var appCompatActivity: AppCompatActivity
     lateinit var establecimiento: Establecimiento
-    var vectorComanda:ArrayList<Pedido> = ArrayList()
+    var vectorComanda:ArrayList<String> = ArrayList()
+    var precio:Double = 0.0
 }

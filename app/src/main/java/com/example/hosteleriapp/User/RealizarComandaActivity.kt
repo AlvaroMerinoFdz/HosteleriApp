@@ -33,10 +33,9 @@ class RealizarComandaActivity : AppCompatActivity() {
 
         btnRealizarPedido.setOnClickListener {
             if(txtNumeroMesa.text.toString()!=""){
-                Log.e("Alvaro",Compartido.vectorComanda[0].producto.nombre)
-                Log.e("Alvaro",Compartido.vectorComanda[0].cantidad.toString())
-                var comanda = Comanda(Compartido.usuario.correo,txtNumeroMesa.text.toString().toInt(),Compartido.vectorComanda)
+                var comanda = Comanda(Compartido.usuario.correo,txtNumeroMesa.text.toString().toInt(),Compartido.vectorComanda,Compartido.establecimiento.correo,Compartido.precio)
                 Firebase.crearPedido(comanda)
+                onBackPressed()
             }else{
                 Toast.makeText(this,"Debe de seleccionar un número de mesa", Toast.LENGTH_LONG).show()
             }

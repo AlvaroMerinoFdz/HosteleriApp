@@ -12,4 +12,5 @@ object Compartido {
     lateinit var establecimiento: Establecimiento
     var vectorComanda:ArrayList<String> = ArrayList()
     var precio:Double = 0.0
+    lateinit var comanda:Comanda
 }

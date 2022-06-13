@@ -291,4 +291,14 @@ object Firebase {
         }
         return comandas
     }
+
+    fun borrarComanda(comanda: Comanda) {
+        val db = Firebase.firestore
+        val TAG = "Alvaro"
+        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento).delete()
+            .addOnSuccessListener { Log.d(TAG, "Comanda borrado.!") }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error al Comanda el producto.", e)
+            }
+    }
 }

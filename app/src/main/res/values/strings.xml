@@ -51,4 +51,7 @@
     <string name="edit_user">Edit user</string>
     <string name="realizar_pedido">Make an order</string>
     <string name="numero_mesa">table number</string>
+    <string name="completar_pedido">Complete order</string>
+    <string name="marcar_no_complete">mark not completed</string>
+    <string name="visualizar_comanda">Visualize Order</string>
 </resources>

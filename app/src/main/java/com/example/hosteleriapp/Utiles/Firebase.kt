@@ -3,7 +3,6 @@ package com.example.hosteleriapp.Utiles
 import android.content.ContentValues
 import android.util.Log
 import com.example.hosteleriapp.Objetos.*
-import com.example.hosteleriapp.Utiles.LogIn.getDataFromFireStore
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.QuerySnapshot
@@ -15,6 +14,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
+import java.time.LocalDateTime
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 object Firebase {
 
@@ -142,13 +144,17 @@ object Firebase {
     }
 
     fun obtenerCarta(correo: String): ArrayList<Producto> {
-        var productos :ArrayList<Producto> = ArrayList()
+        var productos: ArrayList<Producto> = ArrayList()
         var datos: QuerySnapshot? = null
 
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
-         datos=
-            getDataFromFireStore("productos",correo) as QuerySnapshot //Obtenermos la colección
+                datos =
+                    getDataFromFireStore(
+                        "productos",
+                        "correo",
+                        correo
+                    ) as QuerySnapshot //Obtenermos la colección
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
@@ -157,8 +163,8 @@ object Firebase {
         for (dc: DocumentChange in datos?.documentChanges!!) {
             if (dc.type == DocumentChange.Type.ADDED) {
                 var producto = Producto(
-                    dc.document.get("correo")as String,
-                    dc.document.get("nombre")as String,
+                    dc.document.get("correo") as String,
+                    dc.document.get("nombre") as String,
                     dc.document.get("descripcion") as String,
                     dc.document.get("precio") as Double
                 )
@@ -168,29 +174,35 @@ object Firebase {
         }
         return productos
     }
-    suspend fun getDataFromFireStore(coleccion:String): QuerySnapshot?{
-        return try{
+
+    suspend fun getDataFromFireStore(coleccion: String): QuerySnapshot? {
+        return try {
             val data = db.collection(coleccion)
                 .get()
                 .await()
             data
-        }catch (e : Exception){
+        } catch (e: Exception) {
             null
         }
     }
-    suspend fun getDataFromFireStore(coleccion:String,nombreCampo:String): QuerySnapshot?{
-        return try{
-            val data = db.collection(coleccion).whereEqualTo("correo",nombreCampo)
+
+    suspend fun getDataFromFireStore(
+        coleccion: String,
+        nombreCampo: String,
+        valorCampo: String
+    ): QuerySnapshot? {
+        return try {
+            val data = db.collection(coleccion).whereEqualTo(nombreCampo, valorCampo)
                 .get()
                 .await()
             data
-        }catch (e : Exception){
+        } catch (e: Exception) {
             null
         }
     }
 
 
-    fun addProducto(producto: Producto){
+    fun addProducto(producto: Producto) {
         db.collection("productos").document(producto.nombre + producto.correo)
             .set(producto)
             .addOnSuccessListener {
@@ -213,31 +225,34 @@ object Firebase {
 
     fun getEstablecimientos(datos: QuerySnapshot?): ArrayList<Establecimiento> {
         var establecimientos: ArrayList<Establecimiento> = ArrayList()
-        var ubicacion:LatLng? = null
+        var ubicacion: LatLng? = null
         for (dc: DocumentChange in datos?.documentChanges!!) {
             if (dc.type == DocumentChange.Type.ADDED) {
-                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?,Double?>?
+                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?, Double?>?
 
                 if (objetoRecibido != null) {
-                    ubicacion= LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
+                    ubicacion =
+                        LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
                 }
-                    var establecimiento = Establecimiento(
-                        dc.document.get("correo").toString(),
-                        dc.document.get("contraseña").toString(),
-                        dc.document.get("nombre") as String,
-                        dc.document.get("apellidos") as String,ubicacion)
-                    Log.e("Alvaro", establecimiento.toString())
-                    Log.e("Alvaro", establecimiento.toString())
-                    if(establecimiento.ubicacion != null){
-                        establecimientos.add(establecimiento)
-                    }
+                var establecimiento = Establecimiento(
+                    dc.document.get("correo").toString(),
+                    dc.document.get("contraseña").toString(),
+                    dc.document.get("nombre") as String,
+                    dc.document.get("apellidos") as String, ubicacion
+                )
+                Log.e("Alvaro", establecimiento.toString())
+                Log.e("Alvaro", establecimiento.toString())
+                if (establecimiento.ubicacion != null) {
+                    establecimientos.add(establecimiento)
                 }
+            }
         }
         return establecimientos
     }
 
     fun crearPedido(comanda: Comanda) {
-        db.collection("comandas").document(comanda.mesa.toString())
+        db.collection("comandas")
+            .document(comanda.mesa.toString() + comanda.cliente + comanda.establecimiento + comanda.fecha.toString())
             .set(comanda)
             .addOnSuccessListener {
                 Log.e(ContentValues.TAG, "Comanda añadido")
@@ -245,5 +260,108 @@ object Firebase {
             .addOnFailureListener { e ->
                 Log.w(ContentValues.TAG, "Error añadiendo Comanda", e.cause)
             }
+    }
+
+    fun obtenerComandas(correo: String): ArrayList<Comanda> {
+        var comandas: ArrayList<Comanda> = ArrayList()
+        var datos: QuerySnapshot? = null
+
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                datos =
+                    getDataFromFireStore(
+                        "comandas",
+                        "establecimiento",
+                        correo
+                    ) as QuerySnapshot //Obtenermos la colección
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+        }
+        for (dc: DocumentChange in datos?.documentChanges!!) {
+            var pedidos = ArrayList<Pedido>()
+            var objetoRecibido: ArrayList<HashMap<String, Any>> =
+                dc.document.get("pedidos") as ArrayList<HashMap<String, Any>>
+            for (objeto in objetoRecibido) {
+                var cantidad = objeto.get("cantidad") as Long
+                var pedido: Pedido = Pedido(objeto.get("producto") as String, cantidad.toInt())
+                pedidos.add(pedido)
+            }
+            if (dc.type == DocumentChange.Type.ADDED) {
+                var mesa = dc.document.get("mesa") as Long
+                var comanda = Comanda(
+                    dc.document.get("cliente") as String, mesa.toInt(),
+                    pedidos,
+                    dc.document.get("establecimiento") as String,
+                    dc.document.get("precio") as Double,
+                    dc.document.get("completado") as Boolean,
+                    dc.document.get("fecha") as String
+                )
+                comandas.add(comanda)
+            }
+        }
+        return comandas
+    }
+
+    fun borrarComanda(comanda: Comanda) {
+        val db = Firebase.firestore
+        val TAG = "Alvaro"
+        db.collection("comandas")
+            .document(comanda.mesa.toString() + comanda.cliente + comanda.establecimiento + comanda.fecha.toString())
+            .delete()
+            .addOnSuccessListener { Log.d(TAG, "Comanda borrado.!") }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error al Comanda el producto.", e)
+            }
+    }
+
+    fun getUbicacion(datos: QuerySnapshot?, correo: String): LatLng? {
+        var ubicacion: LatLng? = null
+        for (dc: DocumentChange in datos?.documentChanges!!) {
+            if (dc.type == DocumentChange.Type.ADDED) {
+                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?, Double?>?
+
+                if (objetoRecibido != null) {
+                    ubicacion =
+                        LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
+                }
+                var establecimiento = Establecimiento(
+                    dc.document.get("correo").toString(),
+                    dc.document.get("contraseña").toString(),
+                    dc.document.get("nombre") as String,
+                    dc.document.get("apellidos") as String, ubicacion
+                )
+                if (establecimiento.correo.equals(correo)) {
+                    return ubicacion
+                }
+            }
+        }
+        return null
+    }
+
+    fun getEstablecimiento(datos: QuerySnapshot, correo: String): Establecimiento? {
+        var ubicacion: LatLng? = null
+
+        for (dc: DocumentChange in datos?.documentChanges!!) {
+            if (dc.type == DocumentChange.Type.ADDED) {
+                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?, Double?>?
+
+                if (objetoRecibido != null) {
+                    ubicacion =
+                        LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
+                }
+                var establecimiento = Establecimiento(
+                    dc.document.get("correo").toString(),
+                    dc.document.get("contraseña").toString(),
+                    dc.document.get("nombre") as String,
+                    dc.document.get("apellidos") as String, ubicacion
+                )
+                if (establecimiento.correo.equals(correo)) {
+                    return establecimiento
+                }
+            }
+
+        }
+        return null
     }
 }

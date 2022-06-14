@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HosteleriApp">
         <activity
+            android:name=".Bar.GestionarUbicacionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Bar.VisualizarComanda"
+            android:exported="false" />
+        <activity
             android:name=".User.RealizarComandaActivity"
             android:exported="false" />
         <activity

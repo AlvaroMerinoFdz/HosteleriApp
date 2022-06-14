@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapAcceder1"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Bar.FragmentGestionarLocalizacion"/>
+
+    <!--
+    he tenido que cambiar el android:name por class,
+    porque me daba un error que no sabía de donde venía
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    class="com.google.android.gms.maps.SupportMapFragment"
+    -->

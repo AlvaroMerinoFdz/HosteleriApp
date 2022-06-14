@@ -10,19 +10,23 @@
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_editar_producto.xml" value="0.25" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_editar_usuario.xml" value="0.2477355072463768" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_establecimiento.xml" value="0.19947916666666668" />
+        <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_gestionar_ubicacion.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_main.xml" value="0.28306159420289856" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_realizar_comanda.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_registrar.xml" value="0.1408514492753623" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_usuario.xml" value="0.19010416666666666" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_ver_carta.xml" value="0.23229166666666667" />
+        <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/activity_visualizar_comanda.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/bar_menu.xml" value="0.1" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/fragment_establecimiento.xml" value="0.19947916666666668" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/fragment_gestionar_carta.xml" value="0.22" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/fragment_gestionar_comandas.xml" value="0.18854166666666666" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/fragment_gestionar_localizacion.xml" value="0.1625615763546798" />
+        <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/item_pedido.xml" value="0.1778115501519757" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/item_producto.xml" value="0.1875" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/item_realizar_comanda.xml" value="0.29257246376811596" />
+        <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/item_visualizar_comanda.xml" value="0.1778115501519757" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/splashscreen.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/layout/usuarios_card.xml" value="0.2572463768115942" />
         <entry key="..\:/Users/Alvaro Merino/source/repos/HosteleriApp/app/src/main/res/menu/ubicacion_menu.xml" value="0.33" />

@@ -120,6 +120,7 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
                                     crearEstablecimiento(establecimiento)
                                 }
                                 modUsuario(adaptadorUsuarios.usuarios[pos])
+                                adaptadorUsuarios.notifyDataSetChanged()
                             })
                     builder.create().show()
                     adaptadorUsuarios.notifyDataSetChanged()

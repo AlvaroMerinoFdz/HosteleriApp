@@ -251,7 +251,8 @@ object Firebase {
     }
 
     fun crearPedido(comanda: Comanda) {
-        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento+comanda.fecha.toString()   )
+        db.collection("comandas")
+            .document(comanda.mesa.toString() + comanda.cliente + comanda.establecimiento + comanda.fecha.toString())
             .set(comanda)
             .addOnSuccessListener {
                 Log.e(ContentValues.TAG, "Comanda añadido")
@@ -279,10 +280,11 @@ object Firebase {
         }
         for (dc: DocumentChange in datos?.documentChanges!!) {
             var pedidos = ArrayList<Pedido>()
-            var objetoRecibido: ArrayList<HashMap<String, Any>> = dc.document.get("pedidos") as ArrayList<HashMap<String, Any>>
-            for(objeto in objetoRecibido){
-                var cantidad = objeto.get("cantidad")as Long
-                var pedido:Pedido = Pedido(objeto.get("producto") as String, cantidad.toInt())
+            var objetoRecibido: ArrayList<HashMap<String, Any>> =
+                dc.document.get("pedidos") as ArrayList<HashMap<String, Any>>
+            for (objeto in objetoRecibido) {
+                var cantidad = objeto.get("cantidad") as Long
+                var pedido: Pedido = Pedido(objeto.get("producto") as String, cantidad.toInt())
                 pedidos.add(pedido)
             }
             if (dc.type == DocumentChange.Type.ADDED) {
@@ -304,11 +306,62 @@ object Firebase {
     fun borrarComanda(comanda: Comanda) {
         val db = Firebase.firestore
         val TAG = "Alvaro"
-        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento+comanda.fecha.toString()).delete()
+        db.collection("comandas")
+            .document(comanda.mesa.toString() + comanda.cliente + comanda.establecimiento + comanda.fecha.toString())
+            .delete()
             .addOnSuccessListener { Log.d(TAG, "Comanda borrado.!") }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error al Comanda el producto.", e)
             }
     }
 
+    fun getUbicacion(datos: QuerySnapshot?, correo: String): LatLng? {
+        var ubicacion: LatLng? = null
+        for (dc: DocumentChange in datos?.documentChanges!!) {
+            if (dc.type == DocumentChange.Type.ADDED) {
+                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?, Double?>?
+
+                if (objetoRecibido != null) {
+                    ubicacion =
+                        LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
+                }
+                var establecimiento = Establecimiento(
+                    dc.document.get("correo").toString(),
+                    dc.document.get("contraseña").toString(),
+                    dc.document.get("nombre") as String,
+                    dc.document.get("apellidos") as String, ubicacion
+                )
+                if (establecimiento.correo.equals(correo)) {
+                    return ubicacion
+                }
+            }
+        }
+        return null
+    }
+
+    fun getEstablecimiento(datos: QuerySnapshot, correo: String): Establecimiento? {
+        var ubicacion: LatLng? = null
+
+        for (dc: DocumentChange in datos?.documentChanges!!) {
+            if (dc.type == DocumentChange.Type.ADDED) {
+                var objetoRecibido = dc.document.get("ubicacion") as HashMap<String?, Double?>?
+
+                if (objetoRecibido != null) {
+                    ubicacion =
+                        LatLng(objetoRecibido.get("latitude")!!, objetoRecibido.get("longitude")!!)
+                }
+                var establecimiento = Establecimiento(
+                    dc.document.get("correo").toString(),
+                    dc.document.get("contraseña").toString(),
+                    dc.document.get("nombre") as String,
+                    dc.document.get("apellidos") as String, ubicacion
+                )
+                if (establecimiento.correo.equals(correo)) {
+                    return establecimiento
+                }
+            }
+
+        }
+        return null
+    }
 }

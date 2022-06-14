@@ -1,5 +1,6 @@
 package com.example.hosteleriapp.Bar
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -41,7 +42,11 @@ class BarActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.opcCarta -> transaction.replace(R.id.contenedor_fragments_bar,fragmentGestionarCarta).commit()
             R.id.opcComandas ->  transaction.replace(R.id.contenedor_fragments_bar,fragmentGestionarComandas).commit()
-            R.id.opcLocalizacion ->  transaction.replace(R.id.contenedor_fragments_bar,fragmentGestionarLocalizacion).commit()
+            R.id.opcLocalizacion ->  {
+                val ubicacionIntent = Intent(applicationContext,GestionarUbicacionActivity::class.java).apply {
+                }
+                startActivity(ubicacionIntent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

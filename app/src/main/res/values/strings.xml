@@ -54,4 +54,6 @@
     <string name="completar_pedido">Complete order</string>
     <string name="marcar_no_complete">mark not completed</string>
     <string name="visualizar_comanda">Visualize Order</string>
+    <string name="guardar_ubicacion">You want save this ubication?</string>
+    <string name="no">no</string>
 </resources>

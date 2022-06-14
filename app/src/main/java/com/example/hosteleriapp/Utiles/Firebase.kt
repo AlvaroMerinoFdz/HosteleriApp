@@ -3,7 +3,6 @@ package com.example.hosteleriapp.Utiles
 import android.content.ContentValues
 import android.util.Log
 import com.example.hosteleriapp.Objetos.*
-import com.example.hosteleriapp.Utiles.LogIn.getDataFromFireStore
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.QuerySnapshot
@@ -15,6 +14,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
+import java.time.LocalDateTime
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 object Firebase {
 
@@ -249,7 +251,7 @@ object Firebase {
     }
 
     fun crearPedido(comanda: Comanda) {
-        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento   )
+        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento+comanda.fecha.toString()   )
             .set(comanda)
             .addOnSuccessListener {
                 Log.e(ContentValues.TAG, "Comanda añadido")
@@ -275,16 +277,23 @@ object Firebase {
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
         }
-
         for (dc: DocumentChange in datos?.documentChanges!!) {
+            var pedidos = ArrayList<Pedido>()
+            var objetoRecibido: ArrayList<HashMap<String, Any>> = dc.document.get("pedidos") as ArrayList<HashMap<String, Any>>
+            for(objeto in objetoRecibido){
+                var cantidad = objeto.get("cantidad")as Long
+                var pedido:Pedido = Pedido(objeto.get("producto") as String, cantidad.toInt())
+                pedidos.add(pedido)
+            }
             if (dc.type == DocumentChange.Type.ADDED) {
                 var mesa = dc.document.get("mesa") as Long
                 var comanda = Comanda(
                     dc.document.get("cliente") as String, mesa.toInt(),
-                    dc.document.get("pedidos") as ArrayList<String>,
+                    pedidos,
                     dc.document.get("establecimiento") as String,
                     dc.document.get("precio") as Double,
-                    dc.document.get("completado") as Boolean
+                    dc.document.get("completado") as Boolean,
+                    dc.document.get("fecha") as String
                 )
                 comandas.add(comanda)
             }
@@ -295,10 +304,11 @@ object Firebase {
     fun borrarComanda(comanda: Comanda) {
         val db = Firebase.firestore
         val TAG = "Alvaro"
-        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento).delete()
+        db.collection("comandas").document(comanda.mesa.toString()+comanda.cliente+comanda.establecimiento+comanda.fecha.toString()).delete()
             .addOnSuccessListener { Log.d(TAG, "Comanda borrado.!") }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error al Comanda el producto.", e)
             }
     }
+
 }

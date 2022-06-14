@@ -6,4 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".Bar.VisualizarComanda">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_mostrar_comanda"
+        android:layout_width="350dp"
+        android:layout_height="660dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

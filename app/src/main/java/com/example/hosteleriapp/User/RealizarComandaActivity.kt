@@ -2,7 +2,6 @@ package com.example.hosteleriapp.User
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hosteleriapp.Objetos.Comanda
@@ -12,7 +11,6 @@ import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
 import com.example.hosteleriapp.adaptadores.AdaptadorRealizarComanda
 import kotlinx.android.synthetic.main.activity_realizar_comanda.*
-import kotlinx.android.synthetic.main.activity_ver_carta.*
 
 class RealizarComandaActivity : AppCompatActivity() {
 
@@ -32,12 +30,13 @@ class RealizarComandaActivity : AppCompatActivity() {
         Compartido.vectorComanda.clear()
 
         btnRealizarPedido.setOnClickListener {
-            if(txtNumeroMesa.text.toString()!=""){
+            if(txtNumeroMesa.text.toString()!="" && Compartido.precio>0){
                 var comanda = Comanda(Compartido.usuario.correo,txtNumeroMesa.text.toString().toInt(),Compartido.vectorComanda,Compartido.establecimiento.correo,Compartido.precio)
                 Firebase.crearPedido(comanda)
+                Compartido.precio = 0.0
                 onBackPressed()
             }else{
-                Toast.makeText(this,"Debe de seleccionar un número de mesa", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Compruebe los datos e introduzcalos de forma correcta", Toast.LENGTH_LONG).show()
             }
         }
     }

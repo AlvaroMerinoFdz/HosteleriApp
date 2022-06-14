@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,6 +90,7 @@ class AdaptadorComandas(var comandas: ArrayList<Comanda>, var context: AppCompat
                     })
                     .setNegativeButton(R.string.visualizar_comanda, DialogInterface.OnClickListener { dialog, which ->
                         Compartido.comanda = comanda
+                        Log.e("Alvaro",comanda.pedidos[0].producto)
                         val visualizarComandaIntent = Intent(Compartido.appCompatActivity, VisualizarComanda::class.java).apply {
                         }
                         context.startActivity(visualizarComandaIntent)
@@ -97,18 +99,18 @@ class AdaptadorComandas(var comandas: ArrayList<Comanda>, var context: AppCompat
                 adaptadorComandas.notifyDataSetChanged()
 
             })
-            itemView.setOnClickListener {
+            itemView.setOnLongClickListener(View.OnLongClickListener  {
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("Opciones de la comanda")
-                    .setPositiveButton(
-                        "Borrar Comanda",
-                        DialogInterface.OnClickListener { dialog, which ->
+                    .setPositiveButton("Borrar Comanda", DialogInterface.OnClickListener { dialog, which ->
                             Firebase.borrarComanda(comanda)
                             comandas.remove(comanda)
+                            adaptadorComandas.notifyDataSetChanged()
                         })
                 builder.create().show()
-                adaptadorComandas.notifyDataSetChanged()
-            }
+                true
+
+            })
         }
     }
 

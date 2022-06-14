@@ -46,14 +46,14 @@ class AdaptadorRealizarComanda(var productos: ArrayList<Producto>, var context: 
             cantidad.setOnFocusChangeListener { v, hasFocus ->
                 if(!hasFocus){
                     for(elemento in vectorComanda){
-                        if(elemento == producto.nombre){
+                        if(elemento.producto == producto.nombre){
                             vectorComanda.remove(elemento)
-                            Compartido.precio -= producto.precio
+                            Compartido.precio -= producto.precio * cantidad.text.toString().toInt()
                             break
                         }
                     }
-                    vectorComanda.add(producto.nombre)
-                    Compartido.precio += producto.precio
+                    vectorComanda.add(Pedido(producto.nombre,cantidad.text.toString().toInt()))
+                    Compartido.precio += producto.precio * cantidad.text.toString().toInt()
                 }
             }
         }

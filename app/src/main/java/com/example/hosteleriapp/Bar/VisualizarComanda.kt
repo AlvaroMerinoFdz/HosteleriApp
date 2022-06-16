@@ -21,5 +21,7 @@ class VisualizarComanda : AppCompatActivity() {
         rv_mostrar_comanda.setHasFixedSize(true)
         rv_mostrar_comanda.layoutManager = LinearLayoutManager(Compartido.appCompatActivity)
         rv_mostrar_comanda.adapter = miAdapter
+
+        txtPrecioComanda.text = Compartido.comanda.precio.toString() + "€"
     }
 }

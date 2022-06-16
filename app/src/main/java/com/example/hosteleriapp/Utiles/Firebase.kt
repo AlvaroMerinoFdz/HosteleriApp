@@ -169,8 +169,9 @@ object Firebase {
                     dc.document.get("correo") as String,
                     dc.document.get("nombre") as String,
                     dc.document.get("descripcion") as String,
-                    dc.document.get("precio") as Double
-                )
+                    dc.document.get("precio") as Double,
+                    dc.document.get("imagen") as String?
+                    )
                 Log.e("Alvaro", producto.toString())
                 productos.add(producto)
             }

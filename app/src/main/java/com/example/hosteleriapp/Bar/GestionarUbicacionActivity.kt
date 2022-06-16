@@ -77,13 +77,8 @@ class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        runBlocking {
-            val job: Job = launch(context = Dispatchers.Default) {
-                enableMyLocation()
-            }
-            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
-            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
-        }
+        enableMyLocation()
+
         map.setOnMyLocationClickListener(this)
         createMarker()
     }

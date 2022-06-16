@@ -72,6 +72,7 @@ class AdaptadorProductos(var productos: ArrayList<Producto>, var context: AppCom
                     .setNegativeButton(
                         R.string.editar_producto,
                         DialogInterface.OnClickListener { dialog, id ->
+                            Compartido.producto = productos[pos]
                             editarProducto(adaptadorProductos.productos[pos], context)
                             adaptadorProductos.notifyDataSetChanged()
                         })

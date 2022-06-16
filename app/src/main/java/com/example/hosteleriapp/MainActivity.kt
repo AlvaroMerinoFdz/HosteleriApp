@@ -1,12 +1,16 @@
 package com.example.hosteleriapp
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.example.hosteleriapp.Administrador.AdminActivity
 import com.example.hosteleriapp.Bar.BarActivity
 import com.example.hosteleriapp.Objetos.Compartido
@@ -37,12 +41,21 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private var continuar: Boolean = true
     var RC_SIGN_IN = 1
+    private val LOCATION_REQUEST_CODE: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Compartido.context = this
+
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                enableMyLocation()
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+        }
 
         //Con esto lanzamos eventos personalizados a GoogleAnalytics que podemos ver en nuestra consola de FireBase.
         val analy: FirebaseAnalytics = FirebaseAnalytics.getInstance(this)
@@ -220,4 +233,55 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
             }
         }
     }//fin ActivityResult
+    /**
+     * función que primero compruebe si el mapa ha sido inicializado, si no es así saldrá de la función gracias
+     * a la palabra return, si por el contrario map ya ha sido inicializada, es decir que el mapa ya ha cargado,
+     * pues comprobaremos los permisos.
+     */
+    @SuppressLint("MissingPermission")
+    fun enableMyLocation() {
+            requestLocationPermission()
+    }
+
+    companion object {
+        const val REQUEST_CODE_LOCATION = 0
+    }
+
+    /**
+     * Método que solicita los permisos.
+     */
+    private fun requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
+            Toast.makeText(this, "Ve a ajustes y acepta los permisos", Toast.LENGTH_SHORT).show()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_REQUEST_CODE
+            )
+        }
+    }
+
+    @SuppressLint("MissingSuperCall", "MissingPermission")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_CODE_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                Toast.makeText(
+                    this,
+                    "Para activar la localización ve a ajustes y acepta los permisos",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else -> {}
+        }
+    }
 }

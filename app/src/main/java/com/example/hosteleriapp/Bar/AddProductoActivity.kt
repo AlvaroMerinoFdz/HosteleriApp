@@ -19,6 +19,7 @@ import com.example.hosteleriapp.Objetos.Compartido.codigo_galeria
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
+import com.example.hosteleriapp.Utiles.Firebase.addImagen
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_add_producto.*
@@ -44,7 +45,7 @@ class AddProductoActivity : AppCompatActivity() {
                 var nombreImagen: String = nombre + Compartido.usuario.correo
                 var producto =
                     Producto(Compartido.usuario.correo, nombre, descripcion, precio, nombreImagen)
-                addImagen(imagen!!, "productos", nombreImagen)
+                Firebase.addImagen(imagen!!, Compartido.carpetaProductos, nombreImagen)
                 Firebase.addProducto(producto)
                 Toast.makeText(this, R.string.producto_added, Toast.LENGTH_LONG).show()
                 onBackPressed()
@@ -61,11 +62,6 @@ class AddProductoActivity : AppCompatActivity() {
             seleccionarImagen()
         }
 
-    }
-
-    private fun addImagen(image: Bitmap, s: String, nombreImagen: String) {
-        val imgRef = storageRef.child("establecimientos/$nombreImagen.jpg")
-        imgRef.putBytes(getBytes(image)!!)
     }
 
     private fun seleccionarImagen() {
@@ -150,11 +146,7 @@ class AddProductoActivity : AppCompatActivity() {
         )
     }
 
-    private fun getBytes(bitmap: Bitmap): ByteArray? {
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream)
-        return stream.toByteArray()
-    }
+
 
 
 }

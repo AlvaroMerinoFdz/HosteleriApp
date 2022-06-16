@@ -1,7 +1,10 @@
 package com.example.hosteleriapp.Utiles
 
 import android.content.ContentValues
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import android.widget.Toast
 import com.example.hosteleriapp.Objetos.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentChange
@@ -14,11 +17,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 object Firebase {
 
     private val db = Firebase.firestore
-    private val storageRef = Firebase.storage.reference
+    val storageRef = Firebase.storage.reference
 
     fun crearUsuario(usuario: Usuario) {
         db.collection("usuarios").document(usuario.correo)
@@ -362,4 +367,17 @@ object Firebase {
         }
         return null
     }
+
+    //Gestión de imágenes
+    fun addImagen(image: Bitmap, carpeta: String, nombreImagen: String) {
+        val imgRef = storageRef.child("$carpeta/$nombreImagen.jpg")
+        imgRef.putBytes(getBytes(image)!!)
+    }
+
+    private fun getBytes(bitmap: Bitmap): ByteArray? {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream)
+        return stream.toByteArray()
+    }
+
 }

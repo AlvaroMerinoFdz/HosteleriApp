@@ -15,5 +15,5 @@ object Compartido {
     lateinit var comanda: Comanda
     val codigo_camara = 1888
     var codigo_galeria = 1887
-    var codigo_file = 1
+    val carpetaProductos = "productos"
 }

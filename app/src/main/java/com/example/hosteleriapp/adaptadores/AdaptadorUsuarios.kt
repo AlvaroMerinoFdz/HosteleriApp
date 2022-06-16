@@ -87,7 +87,7 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
                     }
 
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Opciones del usuario")
+                    builder.setMessage(R.string.opciones_usuario)
                         .setPositiveButton(R.string.eliminar,
                             DialogInterface.OnClickListener { dialog, id ->
                                 //eliminamos el usuario de la BBDD

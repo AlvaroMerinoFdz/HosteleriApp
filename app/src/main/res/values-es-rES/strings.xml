@@ -55,4 +55,14 @@
     <string name="no">No</string>
     <string name="product_name_order">Nombre del producto</string>
     <string name="cuantity">Cantidad</string>
+    <string name="opciones_comanda">Opciones de la comanda</string>
+    <string name="delete_order">Borrar comanda</string>
+    <string name="opciones_usuario">Opciones del usuario</string>
+    <string name="seleccionar_imagen">Seleccionar imagen</string>
+    <string name="metodo_utilizar">¿Qué método quieres utilizar?</string>
+    <string name="camara">Camara</string>
+    <string name="galeria">Galería</string>
+    <string name="selecciona_imagen">Selecciona una imagen</string>
+    <string name="download_failed">Algo ha fallado en la descarga</string>
+    <string name="permisos_localizacion">Para activar la localización ve a ajustes y acepta los permisos</string>
 </resources>

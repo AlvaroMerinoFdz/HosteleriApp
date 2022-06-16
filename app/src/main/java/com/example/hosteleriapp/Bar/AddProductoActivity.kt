@@ -66,13 +66,13 @@ class AddProductoActivity : AppCompatActivity() {
 
     private fun seleccionarImagen() {
         AlertDialog.Builder(this)
-            .setTitle("Seleccionar Imagen")
-            .setMessage("¿Qué método deseas utilizar?")
-            .setPositiveButton("Cámara") { view, _ ->
+            .setTitle(R.string.seleccionar_imagen)
+            .setMessage(R.string.metodo_utilizar)
+            .setPositiveButton(R.string.camara) { view, _ ->
                 hacerFotoCamara()
                 view.dismiss()
             }
-            .setNegativeButton("Galería") { view, _ ->
+            .setNegativeButton(R.string.galeria) { view, _ ->
                 seleccionarDeGaleria()
                 view.dismiss()
             }
@@ -141,7 +141,7 @@ class AddProductoActivity : AppCompatActivity() {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(
-            Intent.createChooser(intent, "Seleccione una imagen"),
+            Intent.createChooser(intent, getString(R.string.selecciona_imagen)),
             codigo_galeria
         )
     }

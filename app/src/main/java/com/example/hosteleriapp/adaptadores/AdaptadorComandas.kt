@@ -1,6 +1,5 @@
 package com.example.hosteleriapp.adaptadores
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
@@ -11,12 +10,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hosteleriapp.Bar.VisualizarComanda
 import com.example.hosteleriapp.Objetos.Comanda
 import com.example.hosteleriapp.Objetos.Compartido
-import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
 
@@ -78,7 +75,7 @@ class AdaptadorComandas(var comandas: ArrayList<Comanda>, var context: AppCompat
                 }
 
                 val builder = AlertDialog.Builder(context)
-                builder.setMessage("Opciones de la comanda")
+                builder.setMessage(R.string.opciones_comanda)
                     .setPositiveButton(valor, DialogInterface.OnClickListener { dialog, which ->
                         if (!comanda.completado) {
                             comanda.completado = true
@@ -109,8 +106,8 @@ class AdaptadorComandas(var comandas: ArrayList<Comanda>, var context: AppCompat
             })
             itemView.setOnLongClickListener(View.OnLongClickListener  {
                 val builder = AlertDialog.Builder(context)
-                builder.setMessage("Opciones de la comanda")
-                    .setPositiveButton("Borrar Comanda", DialogInterface.OnClickListener { dialog, which ->
+                builder.setMessage(R.string.opciones_comanda)
+                    .setPositiveButton(R.string.delete_order, DialogInterface.OnClickListener { dialog, which ->
                             Firebase.borrarComanda(comanda)
                             comandas.remove(comanda)
                             adaptadorComandas.notifyDataSetChanged()

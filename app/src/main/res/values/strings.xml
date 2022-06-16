@@ -58,4 +58,14 @@
     <string name="no">no</string>
     <string name="product_name_order">Product Name</string>
     <string name="cuantity">cuantity</string>
+    <string name="opciones_comanda">Orders options</string>
+    <string name="delete_order">delete order</string>
+    <string name="opciones_usuario">User options</string>
+    <string name="seleccionar_imagen">Select image</string>
+    <string name="metodo_utilizar">What method want to use?</string>
+    <string name="camara">Camera</string>
+    <string name="galeria">Gallery</string>
+    <string name="selecciona_imagen">Select a image</string>
+    <string name="download_failed">Something failed in the download</string>
+    <string name="permisos_localizacion">To activate the location go to settings and accept the permissions</string>
 </resources>

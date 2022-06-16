@@ -13,9 +13,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.R
+import com.example.hosteleriapp.Utiles.Firebase
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class FragmentGestionarLocalizacion : Fragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
@@ -45,7 +51,13 @@ class FragmentGestionarLocalizacion : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        enableMyLocation()
+        runBlocking {
+            val job: Job = launch(context = Dispatchers.Default) {
+                enableMyLocation()
+            }
+            //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
+            job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
+        }
         createMarker() //--> Nos coloca varios marcadores en el mapa y nos coloca en el CIFP Virgen de Gracia con un Zoom.
 
     }
@@ -113,7 +125,7 @@ class FragmentGestionarLocalizacion : Fragment(), OnMapReadyCallback {
             } else {
                 Toast.makeText(
                     context,
-                    "Para activar la localización ve a ajustes y acepta los permisos",
+                    getString(R.string.permisos_localizacion),
                     Toast.LENGTH_SHORT
                 ).show()
             }

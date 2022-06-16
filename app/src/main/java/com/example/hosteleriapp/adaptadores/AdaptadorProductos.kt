@@ -63,7 +63,7 @@ class AdaptadorProductos(var productos: ArrayList<Producto>, var context: AppCom
                         R.string.delete_product,
                         DialogInterface.OnClickListener { dialog, id ->
                             borrarProducto(adaptadorProductos.productos[pos], productos)
-                            Toast.makeText(context, R.string.producto_added, Toast.LENGTH_LONG)
+                            Toast.makeText(context, R.string.producto_deleted, Toast.LENGTH_LONG)
                                 .show()
 
                             adaptadorProductos.notifyDataSetChanged()

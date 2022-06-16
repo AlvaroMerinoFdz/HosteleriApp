@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HosteleriApp</string>
     <string name="correo_electronico">E-Mail</string>
     <string name="pwd">Contraseña</string>
     <string name="log_in">Iniciar sesión</string>

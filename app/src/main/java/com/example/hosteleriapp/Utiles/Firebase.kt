@@ -1,6 +1,7 @@
 package com.example.hosteleriapp.Utiles
 
 import android.content.ContentValues
+import android.graphics.Bitmap
 import android.util.Log
 import com.example.hosteleriapp.Objetos.*
 import com.google.android.gms.maps.model.LatLng
@@ -8,11 +9,13 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 import java.time.LocalDateTime
 import kotlin.collections.ArrayList
@@ -21,6 +24,7 @@ import kotlin.collections.HashMap
 object Firebase {
 
     private val db = Firebase.firestore
+    private val storageRef = Firebase.storage.reference
 
     fun crearUsuario(usuario: Usuario) {
         db.collection("usuarios").document(usuario.correo)

@@ -2,21 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    style="@style/Theme.EventoCompartidos.Fondo"
     android:layout_height="80dp">
 
     <TextView
+        style="@style/Theme.EventoCompartidos.ColorLetra"
         android:id="@+id/txtNombreProductoComanda"
         android:layout_width="122dp"
         android:layout_height="match_parent"
         android:textStyle="bold" />
 
     <TextView
+        style="@style/Theme.EventoCompartidos.ColorLetra"
         android:id="@+id/txtDescripcionProductoComanda"
         android:layout_width="148dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
     <TextView
+        style="@style/Theme.EventoCompartidos.ColorLetra"
         android:id="@+id/txtPrecioProductoComanda"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -24,6 +28,7 @@
         android:textStyle="bold" />
 
     <TextView
+        style="@style/Theme.EventoCompartidos.ColorLetra"
         android:id="@+id/txteurosComanda"
         android:text="€"
         android:layout_width="wrap_content"

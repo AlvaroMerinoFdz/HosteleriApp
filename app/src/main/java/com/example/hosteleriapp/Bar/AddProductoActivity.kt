@@ -6,31 +6,25 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Compartido.codigo_camara
-import com.example.hosteleriapp.Objetos.Compartido.codigo_file
 import com.example.hosteleriapp.Objetos.Compartido.codigo_galeria
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_add_producto.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
-import java.util.HashMap
 
 class AddProductoActivity : AppCompatActivity() {
 
@@ -42,19 +36,20 @@ class AddProductoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_producto)
 
-        btnAddProductBBDD.setOnClickListener{
-            if(txtNombreProductoAdd.text.isNotEmpty() && txtDescripcionProductoAdd.text.isNotEmpty() && txtPrecioProductoAdd.text.isNotEmpty()){
+        btnAddProductBBDD.setOnClickListener {
+            if (txtNombreProductoAdd.text.isNotEmpty() && txtDescripcionProductoAdd.text.isNotEmpty() && txtPrecioProductoAdd.text.isNotEmpty()) {
                 var nombre = txtNombreProductoAdd.text.toString()
                 var descripcion = txtDescripcionProductoAdd.text.toString()
                 var precio = txtPrecioProductoAdd.text.toString().toDouble()
-                var nombreImagen:String = nombre + Compartido.usuario.correo
-                var producto = Producto(Compartido.usuario.correo, nombre,descripcion,precio,nombreImagen)
-                addImagen(imagen!!,"productos",nombreImagen)
+                var nombreImagen: String = nombre + Compartido.usuario.correo
+                var producto =
+                    Producto(Compartido.usuario.correo, nombre, descripcion, precio, nombreImagen)
+                addImagen(imagen!!, "productos", nombreImagen)
                 Firebase.addProducto(producto)
-                Toast.makeText(this,R.string.producto_added,Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.producto_added, Toast.LENGTH_LONG).show()
                 onBackPressed()
-            }else{
-                Toast.makeText(this,R.string.product_failed,Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, R.string.product_failed, Toast.LENGTH_LONG).show()
             }
         }
 
@@ -62,7 +57,7 @@ class AddProductoActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        imgbtnAddImagen.setOnClickListener{
+        imgbtnAddImagen.setOnClickListener {
             seleccionarImagen()
         }
 
@@ -141,7 +136,7 @@ class AddProductoActivity : AppCompatActivity() {
     private fun cambiarImagen(image: Bitmap) {
         this.imagen = image
         imgbtnAddImagen.setImageBitmap(image)
-        imagen=image
+        imagen = image
     }
 
     private fun seleccionarDeGaleria() {
@@ -149,7 +144,10 @@ class AddProductoActivity : AppCompatActivity() {
 
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), codigo_galeria)
+        startActivityForResult(
+            Intent.createChooser(intent, "Seleccione una imagen"),
+            codigo_galeria
+        )
     }
 
     private fun getBytes(bitmap: Bitmap): ByteArray? {

@@ -1,7 +1,6 @@
 package com.example.hosteleriapp.Utiles
 
 import android.content.ContentValues
-import android.graphics.Bitmap
 import android.util.Log
 import com.example.hosteleriapp.Objetos.*
 import com.google.android.gms.maps.model.LatLng
@@ -15,11 +14,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
-import java.io.ByteArrayOutputStream
-import java.lang.Exception
-import java.time.LocalDateTime
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 object Firebase {
 

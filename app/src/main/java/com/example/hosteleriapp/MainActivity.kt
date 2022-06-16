@@ -3,18 +3,21 @@ package com.example.hosteleriapp
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import com.example.hosteleriapp.User.UsuarioActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.example.hosteleriapp.Administrador.AdminActivity
 import com.example.hosteleriapp.Bar.BarActivity
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Rol
 import com.example.hosteleriapp.Objetos.Usuario
-import com.example.hosteleriapp.Utiles.*
+import com.example.hosteleriapp.User.UsuarioActivity
+import com.example.hosteleriapp.Utiles.BiometricAuthCallback
+import com.example.hosteleriapp.Utiles.BiometricUtilities
+import com.example.hosteleriapp.Utiles.Firebase
 import com.example.hosteleriapp.Utiles.Firebase.crearUsuario
+import com.example.hosteleriapp.Utiles.LogIn
 import com.example.hosteleriapp.Utiles.LogIn.showAlert
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -107,8 +110,8 @@ class MainActivity : AppCompatActivity(), BiometricAuthCallback {
 
     private fun irHome() {
         //Aquí tengo que implementar algo para que hasta que no se haga la autenticación el hilo se quede pinchado
-       /* checkBiometricCapability()
-        showBiometricPrompt()*/
+        /* checkBiometricCapability()
+         showBiometricPrompt()*/
 
         /*
         runBlocking {

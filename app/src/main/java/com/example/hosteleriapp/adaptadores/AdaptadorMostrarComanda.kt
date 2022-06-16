@@ -15,8 +15,8 @@ class AdaptadorMostrarComanda(var pedidos: ArrayList<Pedido>, var context: AppCo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-        LayoutInflater.from(context)
-            .inflate(R.layout.item_pedido, parent, false)
+            LayoutInflater.from(context)
+                .inflate(R.layout.item_pedido, parent, false)
         )
     }
 
@@ -29,6 +29,7 @@ class AdaptadorMostrarComanda(var pedidos: ArrayList<Pedido>, var context: AppCo
     override fun getItemCount(): Int {
         return pedidos.size
     }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nombre = view.findViewById<TextView>(R.id.txtNombreProductoMostrar)
         val cantidad = view.findViewById<TextView>(R.id.txtCantidadProductoMostrar)

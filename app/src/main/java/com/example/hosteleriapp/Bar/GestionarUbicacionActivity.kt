@@ -6,18 +6,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Establecimiento
-import com.example.hosteleriapp.Objetos.Ubicacion
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.User.EditarUsuarioActivity
 import com.example.hosteleriapp.Utiles.Firebase
@@ -32,11 +30,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationClickListener {
+class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback,
+    GoogleMap.OnMyLocationClickListener {
 
     private val LOCATION_REQUEST_CODE: Int = 0
     private lateinit var map: GoogleMap
-     private var ubicacion: LatLng? = null
+    private var ubicacion: LatLng? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +47,7 @@ class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback, Goog
         menuInflater.inflate(R.menu.ubicacion_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.opcSatelite -> {
@@ -89,16 +89,16 @@ class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback, Goog
             val job: Job = launch(context = Dispatchers.Default) {
                 val datos =
                     Firebase.getDataFromFireStore("establecimientos") as QuerySnapshot //Obtenermos la colección
-                ubicacion = Firebase.getUbicacion(datos,Compartido.usuario.correo)
+                ubicacion = Firebase.getUbicacion(datos, Compartido.usuario.correo)
             }
             //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
             job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
         }
 
-        if(ubicacion != null ){
+        if (ubicacion != null) {
             ubicacion?.let { MarkerOptions().position(it).title(Compartido.usuario.correo) }
                 ?.let { map.addMarker(it) }
-        }else{
+        } else {
             Toast.makeText(this, "Este local todavía no tiene ubicacion", Toast.LENGTH_LONG).show()
         }
     }
@@ -171,7 +171,7 @@ class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback, Goog
     }
 
     override fun onMyLocationClick(p0: Location) {
-       var establecimiento : Establecimiento? = null
+        var establecimiento: Establecimiento? = null
         val builder = AlertDialog.Builder(this)
         builder.setMessage(R.string.guardar_ubicacion)
             .setPositiveButton(R.string.yes, DialogInterface.OnClickListener { dialog, which ->
@@ -179,12 +179,13 @@ class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback, Goog
                     val job: Job = launch(context = Dispatchers.Default) {
                         val datos =
                             Firebase.getDataFromFireStore("establecimientos") as QuerySnapshot //Obtenermos la colección
-                        establecimiento = Firebase.getEstablecimiento(datos,Compartido.usuario.correo)
+                        establecimiento =
+                            Firebase.getEstablecimiento(datos, Compartido.usuario.correo)
                     }
                     //Con este método el hilo principal de onCreate se espera a que la función acabe y devuelva la colección con los datos.
                     job.join() //Esperamos a que el método acabe: https://dzone.com/articles/waiting-for-coroutines
                 }
-                establecimiento?.ubicacion = LatLng(p0.latitude,p0.longitude)
+                establecimiento?.ubicacion = LatLng(p0.latitude, p0.longitude)
                 Firebase.crearEstablecimiento(establecimiento!!)
             })
             .setNegativeButton(R.string.no, DialogInterface.OnClickListener { dialog, which ->

@@ -29,7 +29,7 @@ class AdaptadorRealizarComanda(var productos: ArrayList<Producto>, var context: 
         holder.nombre.text = producto.nombre
         holder.descripcion.text = producto.descripcion
         holder.precio.text = producto.precio.toString()
-        holder.bind(producto,context,position,this,productos)
+        holder.bind(producto, context, position, this, productos)
     }
 
     override fun getItemCount(): Int {
@@ -42,17 +42,23 @@ class AdaptadorRealizarComanda(var productos: ArrayList<Producto>, var context: 
         val precio = view.findViewById<TextView>(R.id.txtPrecioProductoComanda)
         var cantidad = view.findViewById<EditText>(R.id.etCantidadProductoComanda)
 
-        fun bind(producto:Producto, context: AppCompatActivity,pos:Int,adaptadorRealizarComanda: AdaptadorRealizarComanda,productos: ArrayList<Producto>){
+        fun bind(
+            producto: Producto,
+            context: AppCompatActivity,
+            pos: Int,
+            adaptadorRealizarComanda: AdaptadorRealizarComanda,
+            productos: ArrayList<Producto>
+        ) {
             cantidad.setOnFocusChangeListener { v, hasFocus ->
-                if(!hasFocus){
-                    for(elemento in vectorComanda){
-                        if(elemento.producto == producto.nombre){
+                if (!hasFocus) {
+                    for (elemento in vectorComanda) {
+                        if (elemento.producto == producto.nombre) {
                             vectorComanda.remove(elemento)
                             Compartido.precio -= producto.precio * cantidad.text.toString().toInt()
                             break
                         }
                     }
-                    vectorComanda.add(Pedido(producto.nombre,cantidad.text.toString().toInt()))
+                    vectorComanda.add(Pedido(producto.nombre, cantidad.text.toString().toInt()))
                     Compartido.precio += producto.precio * cantidad.text.toString().toInt()
                 }
             }

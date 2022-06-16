@@ -1,7 +1,7 @@
 package com.example.hosteleriapp.Administrador
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hosteleriapp.Objetos.Usuario
 import com.example.hosteleriapp.R
@@ -10,7 +10,6 @@ import com.example.hosteleriapp.Utiles.LogIn.getDataFromFireStore
 import com.example.hosteleriapp.adaptadores.AdaptadorUsuarios
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.activity_admin.*
-import kotlinx.android.synthetic.main.activity_usuario.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

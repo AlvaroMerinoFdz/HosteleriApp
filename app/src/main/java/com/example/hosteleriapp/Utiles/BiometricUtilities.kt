@@ -1,6 +1,5 @@
 package com.example.hosteleriapp.Utiles
 
-import android.content.ClipDescription
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
@@ -10,28 +9,29 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.R
-import java.util.concurrent.Executor
-import javax.security.auth.callback.Callback
 
 
-interface BiometricAuthCallback{
+interface BiometricAuthCallback {
     fun onSuccess()
     fun onError()
     fun onNotRecognized()
 }
 
-object BiometricUtilities{
-    fun isDeviceReady(context: Context):Boolean{
-       return BiometricManager.from(context).canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS
+object BiometricUtilities {
+    fun isDeviceReady(context: Context): Boolean {
+        return BiometricManager.from(context).canAuthenticate(BIOMETRIC_WEAK) == BIOMETRIC_SUCCESS
     }
-    var context:Context = Compartido.context
 
-    fun showPrompt(tittle:String = context.getString(R.string.autenticacion),
-                   subtitle:String =  context.getString(R.string.introduce_credenciales),
-                   description: String=context.getString(R.string.introduce_huella),
-                   cancelButton:String = context.getString(R.string.cancelar),
-                   activity: AppCompatActivity,
-                   callback: BiometricAuthCallback){
+    var context: Context = Compartido.context
+
+    fun showPrompt(
+        tittle: String = context.getString(R.string.autenticacion),
+        subtitle: String = context.getString(R.string.introduce_credenciales),
+        description: String = context.getString(R.string.introduce_huella),
+        cancelButton: String = context.getString(R.string.cancelar),
+        activity: AppCompatActivity,
+        callback: BiometricAuthCallback
+    ) {
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(tittle)
             .setSubtitle(subtitle)
@@ -41,7 +41,7 @@ object BiometricUtilities{
             .build()
 
         val executor = ContextCompat.getMainExecutor(activity)
-        val authenticationCallBack = object : BiometricPrompt.AuthenticationCallback(){
+        val authenticationCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 callback.onSuccess()

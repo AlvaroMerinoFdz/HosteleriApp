@@ -79,25 +79,30 @@ class AdaptadorComandas(var comandas: ArrayList<Comanda>, var context: AppCompat
 
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("Opciones de la comanda")
-                    .setPositiveButton(valor,DialogInterface.OnClickListener { dialog, which ->
-                        if(!comanda.completado){
+                    .setPositiveButton(valor, DialogInterface.OnClickListener { dialog, which ->
+                        if (!comanda.completado) {
                             comanda.completado = true
                             Firebase.crearPedido(comanda)
                             adaptadorComandas.notifyDataSetChanged()
-                        }else{
+                        } else {
                             comanda.completado = false
                             Firebase.crearPedido(comanda)
                             adaptadorComandas.notifyDataSetChanged()
                         }
                     })
-                    .setNegativeButton(R.string.visualizar_comanda, DialogInterface.OnClickListener { dialog, which ->
-                        Compartido.comanda = comanda
-                        Log.e("Alvaro",comanda.pedidos[0].producto)
-                        val visualizarComandaIntent = Intent(Compartido.appCompatActivity, VisualizarComanda::class.java).apply {
-                        }
-                        context.startActivity(visualizarComandaIntent)
-                        adaptadorComandas.notifyDataSetChanged()
-                    })
+                    .setNegativeButton(
+                        R.string.visualizar_comanda,
+                        DialogInterface.OnClickListener { dialog, which ->
+                            Compartido.comanda = comanda
+                            Log.e("Alvaro", comanda.pedidos[0].producto)
+                            val visualizarComandaIntent = Intent(
+                                Compartido.appCompatActivity,
+                                VisualizarComanda::class.java
+                            ).apply {
+                            }
+                            context.startActivity(visualizarComandaIntent)
+                            adaptadorComandas.notifyDataSetChanged()
+                        })
                 builder.create().show()
                 adaptadorComandas.notifyDataSetChanged()
 

@@ -1,13 +1,12 @@
 package com.example.hosteleriapp.User
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Usuario
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
-import kotlinx.android.synthetic.main.activity_add_producto.*
 import kotlinx.android.synthetic.main.activity_editar_usuario.*
 
 class EditarUsuarioActivity : AppCompatActivity() {

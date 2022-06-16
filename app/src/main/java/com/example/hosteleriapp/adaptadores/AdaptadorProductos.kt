@@ -10,13 +10,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hosteleriapp.Bar.AddProductoActivity
 import com.example.hosteleriapp.Bar.EditarProductoActivity
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
-import org.w3c.dom.Text
 
 class AdaptadorProductos(var productos: ArrayList<Producto>, var context: AppCompatActivity) :
     RecyclerView.Adapter<AdaptadorProductos.ViewHolder>() {
@@ -33,7 +31,7 @@ class AdaptadorProductos(var productos: ArrayList<Producto>, var context: AppCom
         holder.nombre.text = producto.nombre
         holder.descripcion.text = producto.descripcion
         holder.precio.text = producto.precio.toString()
-        holder.bind(context,position, this,productos)
+        holder.bind(context, position, this, productos)
 
     }
 
@@ -52,7 +50,7 @@ class AdaptadorProductos(var productos: ArrayList<Producto>, var context: AppCom
             adaptadorProductos: AdaptadorProductos,
             productos: ArrayList<Producto>
         ) {
-            itemView.setOnClickListener{
+            itemView.setOnClickListener {
                 // build alert dialog
                 val dialogBuilder = AlertDialog.Builder(context)
 
@@ -61,18 +59,22 @@ class AdaptadorProductos(var productos: ArrayList<Producto>, var context: AppCom
                     // if the dialog is cancelable
                     .setCancelable(true)
                     // positive button text and action
-                    .setPositiveButton(R.string.delete_product, DialogInterface.OnClickListener {
-                            dialog, id -> borrarProducto(adaptadorProductos.productos[pos],productos)
-                        Toast.makeText(context,R.string.producto_added, Toast.LENGTH_LONG).show()
+                    .setPositiveButton(
+                        R.string.delete_product,
+                        DialogInterface.OnClickListener { dialog, id ->
+                            borrarProducto(adaptadorProductos.productos[pos], productos)
+                            Toast.makeText(context, R.string.producto_added, Toast.LENGTH_LONG)
+                                .show()
 
-                        adaptadorProductos.notifyDataSetChanged()
-                    })
+                            adaptadorProductos.notifyDataSetChanged()
+                        })
                     // negative button text and action
-                    .setNegativeButton(R.string.editar_producto, DialogInterface.OnClickListener {
-                            dialog, id ->
-                        editarProducto(adaptadorProductos.productos[pos],context)
-                        adaptadorProductos.notifyDataSetChanged()
-                    })
+                    .setNegativeButton(
+                        R.string.editar_producto,
+                        DialogInterface.OnClickListener { dialog, id ->
+                            editarProducto(adaptadorProductos.productos[pos], context)
+                            adaptadorProductos.notifyDataSetChanged()
+                        })
 
                 // create dialog box
                 val alert = dialogBuilder.create()
@@ -87,7 +89,7 @@ class AdaptadorProductos(var productos: ArrayList<Producto>, var context: AppCom
             context.startActivity(intentEditarProducto)
         }
 
-        private fun borrarProducto(producto: Producto,productos:ArrayList<Producto>) {
+        private fun borrarProducto(producto: Producto, productos: ArrayList<Producto>) {
             Firebase.borrarProducto(producto)
             productos.remove(producto)
         }

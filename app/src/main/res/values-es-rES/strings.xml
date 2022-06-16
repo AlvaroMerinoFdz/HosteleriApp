@@ -53,4 +53,6 @@
     <string name="visualizar_comanda">Visualizar pedido</string>
     <string name="guardar_ubicacion">¿Quieres guardar esta ubicación?</string>
     <string name="no">No</string>
+    <string name="product_name_order">Nombre del producto</string>
+    <string name="cuantity">Cantidad</string>
 </resources>

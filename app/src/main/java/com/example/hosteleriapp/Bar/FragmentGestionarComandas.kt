@@ -1,7 +1,6 @@
 package com.example.hosteleriapp.Bar
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,6 @@ class FragmentGestionarComandas : Fragment() {
         super.onCreate(savedInstanceState)
         runBlocking {
             val job: Job = launch(context = Dispatchers.Default) {
-                Log.e("Alvaro", Compartido.usuario.correo)
                 comandas =
                     Firebase.obtenerComandas(Compartido.usuario.correo)  //'Destripamos' la colección y la metemos en nuestro ArrayList
             }

@@ -139,7 +139,7 @@ class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback,
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         ) {
-            Toast.makeText(this, "Ve a ajustes y acepta los permisos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.ajustes_permisos, Toast.LENGTH_SHORT).show()
         } else {
             ActivityCompat.requestPermissions(
                 this,
@@ -161,7 +161,7 @@ class GestionarUbicacionActivity : AppCompatActivity(), OnMapReadyCallback,
             } else {
                 Toast.makeText(
                     this,
-                    "Para activar la localización ve a ajustes y acepta los permisos",
+                    R.string.ajustes_permisos,
                     Toast.LENGTH_SHORT
                 ).show()
             }

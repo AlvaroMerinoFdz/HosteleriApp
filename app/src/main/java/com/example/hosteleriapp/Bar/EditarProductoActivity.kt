@@ -17,7 +17,6 @@ import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
-import kotlinx.android.synthetic.main.activity_add_producto.*
 import kotlinx.android.synthetic.main.activity_editar_producto.*
 import java.io.File
 import java.io.FileNotFoundException
@@ -34,8 +33,8 @@ class EditarProductoActivity : AppCompatActivity() {
 
         producto = Compartido.producto
 
-        if(!producto.imagen.isNullOrEmpty()){
-            cargarImagen(producto.imagen,Compartido.carpetaProductos)
+        if (!producto.imagen.isNullOrEmpty()) {
+            cargarImagen(producto.imagen, Compartido.carpetaProductos)
         }
 
 
@@ -45,14 +44,15 @@ class EditarProductoActivity : AppCompatActivity() {
 
         txtNombreProductoEditar.isEnabled = false
 
+        var nombre = txtNombreProductoEditar.text.toString()
+        var nombreImagen: String = nombre + Compartido.usuario.correo
+
         btnEditarProducto.setOnClickListener {
             if (txtNombreProductoEditar.text.isNotEmpty() && txtDescripcionProductoEditar.text.isNotEmpty() && txtPrecioProductoEditar.text.isNotEmpty()) {
-                var nombre = txtNombreProductoEditar.text.toString()
+
                 var descripcion = txtDescripcionProductoEditar.text.toString()
                 var precio = txtPrecioProductoEditar.text.toString().toDouble()
-                var nombreImagen: String = nombre + Compartido.usuario.correo
                 var producto = Producto(producto.correo, nombre, descripcion, precio, nombreImagen)
-                Firebase.addImagen(imagen!!, Compartido.carpetaProductos, nombreImagen)
                 Firebase.addProducto(producto)
                 Toast.makeText(this, R.string.producto_edited, Toast.LENGTH_LONG).show()
 
@@ -66,6 +66,8 @@ class EditarProductoActivity : AppCompatActivity() {
         }
         imgbtnEditarImagen.setOnClickListener {
             seleccionarImagen()
+            Firebase.addImagen(imagen!!, Compartido.carpetaProductos, nombreImagen)
+            Toast.makeText(this,R.string.imagen_editada,Toast.LENGTH_LONG).show()
         }
     }
 
@@ -150,14 +152,15 @@ class EditarProductoActivity : AppCompatActivity() {
             Compartido.codigo_galeria
         )
     }
-    fun cargarImagen(nombreImagen: String?, carpeta:String) {
+
+    fun cargarImagen(nombreImagen: String?, carpeta: String) {
         var spaceRef = Firebase.storageRef.child("$carpeta/$nombreImagen.jpg")
-        val localfile  = File.createTempFile("tempImage","jpg")
+        val localfile = File.createTempFile("tempImage", "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             imgbtnEditarImagen.setImageBitmap(bitmap)
-        }.addOnFailureListener{
-            Toast.makeText(this,getString(R.string.download_failed), Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show()
         }
 
     }

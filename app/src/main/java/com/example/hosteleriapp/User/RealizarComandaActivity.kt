@@ -48,7 +48,7 @@ class RealizarComandaActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(
                     this,
-                    "Compruebe los datos e introduzcalos de forma correcta",
+                    R.string.comprobar_datos,
                     Toast.LENGTH_LONG
                 ).show()
             }

@@ -3,7 +3,6 @@ package com.example.hosteleriapp.User
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.hosteleriapp.Objetos.Comanda
 import com.example.hosteleriapp.Objetos.Compartido
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
@@ -21,7 +20,7 @@ class VerCartaActivity : AppCompatActivity() {
 
         productos = Firebase.obtenerCarta(Compartido.establecimiento.correo)
 
-        var nombre = Compartido.establecimiento.nombre + " " +  Compartido.establecimiento.apellidos
+        var nombre = Compartido.establecimiento.nombre + " " + Compartido.establecimiento.apellidos
 
         txtNombreLocalVerCarta.setText(nombre)
 

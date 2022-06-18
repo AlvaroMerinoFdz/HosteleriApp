@@ -69,4 +69,10 @@
     <string name="download_failed">Something failed in the download</string>
     <string name="permisos_localizacion">To activate the location go to settings and accept the permissions</string>
     <string name="precio">Prize</string>
+    <string name="ajustes_permisos">Go to settings and accept the permissions</string>
+    <string name="comprobar_datos">Check the data and enter it correctly</string>
+    <string name="error">Error</string>
+    <string name="error_autenticacion">An error occurred authenticating the user</string>
+    <string name="usuario_registrado">Successfully registered user</string>
+    <string name="imagen_editada">Image edited successfully</string>
 </resources>

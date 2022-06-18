@@ -168,7 +168,7 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
         ) {
-            Toast.makeText(this, "Ve a ajustes y acepta los permisos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.ajustes_permisos, Toast.LENGTH_SHORT).show()
         } else {
             ActivityCompat.requestPermissions(
                 this,
@@ -190,7 +190,7 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
             } else {
                 Toast.makeText(
                     this,
-                    "Para activar la localización ve a ajustes y acepta los permisos",
+                    R.string.ajustes_permisos,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -227,17 +227,15 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
         }
         val distanciaEnMetros = localizacionEstablecimiento.distanceTo(ubicacion)
 
-            if (distanciaEnMetros > 100) {
-                Toast.makeText(this, "Demasiado lejos, pero puedes ver la carta", Toast.LENGTH_SHORT)
-                    .show()
-                val verCartaIntent = Intent(this, VerCartaActivity::class.java).apply {
-                }
-                startActivity(verCartaIntent)
-            } else {
-                val realizarComandaIntent = Intent(this, RealizarComandaActivity::class.java).apply {
-                }
-                startActivity(realizarComandaIntent)
+        if (distanciaEnMetros > 100) {
+            val verCartaIntent = Intent(this, VerCartaActivity::class.java).apply {
             }
+            startActivity(verCartaIntent)
+        } else {
+            val realizarComandaIntent = Intent(this, RealizarComandaActivity::class.java).apply {
+            }
+            startActivity(realizarComandaIntent)
+        }
         return true
     }
 

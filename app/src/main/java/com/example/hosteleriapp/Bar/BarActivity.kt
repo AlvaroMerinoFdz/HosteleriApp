@@ -16,7 +16,6 @@ class BarActivity : AppCompatActivity() {
     lateinit var transaction: FragmentTransaction
     lateinit var fragmentGestionarCarta: Fragment
     lateinit var fragmentGestionarComandas: Fragment
-    lateinit var fragmentGestionarLocalizacion: Fragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bar)
@@ -25,7 +24,6 @@ class BarActivity : AppCompatActivity() {
 
         fragmentGestionarCarta = FragmentGestionarCarta()
         fragmentGestionarComandas = FragmentGestionarComandas()
-        fragmentGestionarLocalizacion = FragmentGestionarLocalizacion()
 
         supportFragmentManager.beginTransaction()
             .add(R.id.contenedor_fragments_bar, fragmentGestionarComandas).commit()

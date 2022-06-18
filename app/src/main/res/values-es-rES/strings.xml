@@ -66,4 +66,10 @@
     <string name="download_failed">Algo ha fallado en la descarga</string>
     <string name="permisos_localizacion">Para activar la localización ve a ajustes y acepta los permisos</string>
     <string name="precio">Precio</string>
+    <string name="ajustes_permisos">Ve a ajustes y acepta los permisos</string>
+    <string name="comprobar_datos">Compruebe los datos e introducelos de forma correcta</string>
+    <string name="error">Error</string>
+    <string name="usuario_registrado">Usuario registrado correctamente</string>
+    <string name="error_autenticacion">Ha ocurrido un error autenticando el usuario</string>
+    <string name="imagen_editada">Imagen editada correctamente</string>
 </resources>

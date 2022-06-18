@@ -33,7 +33,7 @@ class RegistrarActivity : AppCompatActivity() {
                             etApellidosRegistrar.text.toString()
                         )
                         Firebase.crearUsuario(Compartido.usuario)
-                        Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_LONG)
+                        Toast.makeText(this, R.string.usuario_registrado, Toast.LENGTH_LONG)
                             .show()
                         finish()
                     } else {

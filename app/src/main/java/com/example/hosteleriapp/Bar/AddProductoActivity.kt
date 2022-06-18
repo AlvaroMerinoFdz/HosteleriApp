@@ -19,11 +19,9 @@ import com.example.hosteleriapp.Objetos.Compartido.codigo_galeria
 import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 import com.example.hosteleriapp.Utiles.Firebase
-import com.example.hosteleriapp.Utiles.Firebase.addImagen
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.activity_add_producto.*
-import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
 
@@ -145,8 +143,6 @@ class AddProductoActivity : AppCompatActivity() {
             codigo_galeria
         )
     }
-
-
 
 
 }

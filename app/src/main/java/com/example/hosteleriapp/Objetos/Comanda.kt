@@ -1,6 +1,7 @@
 package com.example.hosteleriapp.Objetos
 
 import com.example.hosteleriapp.Utiles.Utiles
+import java.io.Serializable
 
 data class Comanda(
     var cliente: String,
@@ -10,4 +11,4 @@ data class Comanda(
     var precio: Double,
     var completado: Boolean = false,
     var fecha: String = Utiles.getCurrentDateTime().toString()
-)
+): Serializable

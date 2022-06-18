@@ -38,14 +38,14 @@ class AdaptadorRealizarComanda(var productos: ArrayList<Producto>, var context: 
         holder.bind(producto, context, position, this, productos)
     }
 
-    private fun cargarImagenAdaptador(nombreImagen: String?, carpeta:String, imagen: ImageView){
+    private fun cargarImagenAdaptador(nombreImagen: String?, carpeta: String, imagen: ImageView) {
         var spaceRef = Firebase.storageRef.child("$carpeta/$nombreImagen.jpg")
-        val localfile  = File.createTempFile("tempImage","jpg")
+        val localfile = File.createTempFile("tempImage", "jpg")
         spaceRef.getFile(localfile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
             imagen.setImageBitmap(bitmap)
-        }.addOnFailureListener{
-            Toast.makeText(context,R.string.download_failed, Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(context, R.string.download_failed, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hosteleriapp.Objetos.Pedido
-import com.example.hosteleriapp.Objetos.Producto
 import com.example.hosteleriapp.R
 
 class AdaptadorMostrarComanda(var pedidos: ArrayList<Pedido>, var context: AppCompatActivity) :

@@ -23,6 +23,10 @@ class RealizarComandaActivity : AppCompatActivity() {
 
         productos = Firebase.obtenerCarta(Compartido.establecimiento.correo)
 
+        var nombre = Compartido.establecimiento.nombre + " " +  Compartido.establecimiento.apellidos
+
+        txtNombreLocalRealizarComanda.setText(nombre)
+
         miAdapter = AdaptadorRealizarComanda(productos, this)
         rv_realizar_comanda.setHasFixedSize(true)
         rv_realizar_comanda.layoutManager = LinearLayoutManager(this)

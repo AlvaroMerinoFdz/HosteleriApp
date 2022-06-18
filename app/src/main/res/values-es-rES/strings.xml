@@ -65,4 +65,5 @@
     <string name="selecciona_imagen">Selecciona una imagen</string>
     <string name="download_failed">Algo ha fallado en la descarga</string>
     <string name="permisos_localizacion">Para activar la localización ve a ajustes y acepta los permisos</string>
+    <string name="precio">Precio</string>
 </resources>

@@ -50,10 +50,12 @@ class EditarProductoActivity : AppCompatActivity() {
                 var nombre = txtNombreProductoEditar.text.toString()
                 var descripcion = txtDescripcionProductoEditar.text.toString()
                 var precio = txtPrecioProductoEditar.text.toString().toDouble()
-                var producto = Producto(producto.correo, nombre, descripcion, precio)
+                var nombreImagen: String = nombre + Compartido.usuario.correo
+                var producto = Producto(producto.correo, nombre, descripcion, precio, nombreImagen)
+                Firebase.addImagen(imagen!!, Compartido.carpetaProductos, nombreImagen)
                 Firebase.addProducto(producto)
                 Toast.makeText(this, R.string.producto_edited, Toast.LENGTH_LONG).show()
-                onBackPressed()
+
             } else {
                 Toast.makeText(this, R.string.product_failed, Toast.LENGTH_LONG).show()
             }
@@ -134,7 +136,7 @@ class EditarProductoActivity : AppCompatActivity() {
 
     private fun cambiarImagen(image: Bitmap) {
         this.imagen = image
-        imgbtnAddImagen.setImageBitmap(image)
+        imgbtnEditarImagen.setImageBitmap(image)
         imagen = image
     }
 

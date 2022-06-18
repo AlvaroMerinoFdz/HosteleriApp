@@ -77,6 +77,7 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
             }
             job.join()
         }
+
         map.setOnMyLocationClickListener(this)
         map.setOnMarkerClickListener(this)
         createMarker() //--> Nos coloca varios marcadores en el mapa y nos coloca en el CIFP Virgen de Gracia con un Zoom.
@@ -219,31 +220,31 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
         val localizacionEstablecimiento = Location("")
         localizacionEstablecimiento.longitude = p0.position.longitude
         localizacionEstablecimiento.latitude = p0.position.latitude
-        val establecimiento: Establecimiento? = comprobarLocalizacion(localizacionEstablecimiento)
-        if (establecimiento != null) {
+        val establecimiento: Establecimiento = comprobarLocalizacion(localizacionEstablecimiento)
+        if (establecimiento.ubicacion!!.longitude != null) {
             Compartido.establecimiento = establecimiento
+
         }
         val distanciaEnMetros = localizacionEstablecimiento.distanceTo(ubicacion)
-        if (distanciaEnMetros > 100) {
 
-            Toast.makeText(this, "Demasiado lejos, pero puedes ver la carta", Toast.LENGTH_SHORT)
-                .show()
-            val verCartaIntent = Intent(this, VerCartaActivity::class.java).apply {
+            if (distanciaEnMetros > 100) {
+                Toast.makeText(this, "Demasiado lejos, pero puedes ver la carta", Toast.LENGTH_SHORT)
+                    .show()
+                val verCartaIntent = Intent(this, VerCartaActivity::class.java).apply {
+                }
+                startActivity(verCartaIntent)
+            } else {
+                val realizarComandaIntent = Intent(this, RealizarComandaActivity::class.java).apply {
+                }
+                startActivity(realizarComandaIntent)
             }
-            startActivity(verCartaIntent)
-        } else {
-            val realizarComandaIntent = Intent(this, RealizarComandaActivity::class.java).apply {
-            }
-            startActivity(realizarComandaIntent)
-        }
-
         return true
     }
 
     /**
      * Con este método obtenemos el establecimiento en el que hemos pinchado
      */
-    private fun comprobarLocalizacion(localizacionEstablecimiento: Location): Establecimiento? {
+    private fun comprobarLocalizacion(localizacionEstablecimiento: Location): Establecimiento {
         val ubicacionEstablecimiento =
             LatLng(localizacionEstablecimiento.latitude, localizacionEstablecimiento.longitude)
         var seleccionado: Establecimiento? = null
@@ -252,7 +253,7 @@ class UsuarioActivity : AppCompatActivity(), OnMapReadyCallback,
                 seleccionado = establecimiento
             }
         }
-        return seleccionado
+        return seleccionado!!
     }
 
 }

@@ -68,4 +68,5 @@
     <string name="selecciona_imagen">Select a image</string>
     <string name="download_failed">Something failed in the download</string>
     <string name="permisos_localizacion">To activate the location go to settings and accept the permissions</string>
+    <string name="precio">Prize</string>
 </resources>

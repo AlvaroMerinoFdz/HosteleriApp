@@ -35,7 +35,7 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val usuario = usuarios[position]
         holder.correo.text = usuario.correo
-        holder.bind(usuario, context, position, this,usuarios)
+        holder.bind(usuario, context, position, this, usuarios)
     }
 
     override fun getItemCount(): Int {
@@ -61,7 +61,7 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
             context: AppCompatActivity,
             pos: Int,
             adaptadorUsuarios: AdaptadorUsuarios,
-            usuarios:ArrayList<Usuario>
+            usuarios: ArrayList<Usuario>
         ) {
             with(correo) {
                 if (usuario.rol == Rol.USUARIO) {
@@ -87,7 +87,7 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
                     }
 
                     val builder = AlertDialog.Builder(context)
-                    builder.setMessage("Opciones del usuario")
+                    builder.setMessage(R.string.opciones_usuario)
                         .setPositiveButton(R.string.eliminar,
                             DialogInterface.OnClickListener { dialog, id ->
                                 //eliminamos el usuario de la BBDD
@@ -108,7 +108,8 @@ class AdaptadorUsuarios(var usuarios: ArrayList<Usuario>, var context: AppCompat
                                             adaptadorUsuarios.usuarios[pos].apellidos,
                                             null
                                         )
-                                    )    } else {
+                                    )
+                                } else {
                                     adaptadorUsuarios.usuarios[pos].rol = Rol.BAR
                                     var establecimiento = Establecimiento(
                                         correo = adaptadorUsuarios.usuarios[pos].correo,

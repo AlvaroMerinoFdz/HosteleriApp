@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_eventos"
     android:layout_width="match_parent"
+    style="@style/Theme.EventoCompartidos.Fondo"
     android:layout_height="wrap_content">
 
     <TextView
+        style="@style/Theme.EventoCompartidos.ColorLetra"
         android:id="@+id/txtCorreo"
         android:layout_width="match_parent"
         android:layout_height="41dp"

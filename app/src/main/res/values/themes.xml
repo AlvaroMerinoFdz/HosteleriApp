@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.HosteleriApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/light_green_500</item>
-        <item name="colorPrimaryVariant">@color/colorLetra</item>
+        <item name="colorPrimary">#4D8013</item>
+        <item name="colorPrimaryVariant">#215A0B</item>
         <item name="colorOnPrimary">@color/light_green_700</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/light_green_700</item>
@@ -19,5 +19,11 @@
     </style>
     <style name="Theme.HosteleriApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.HosteleriApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="Theme.EventoCompartidos.Fondo" parent="Theme.HosteleriApp">
+        <item name="android:background">@color/colorFondo</item>
+    </style>
+    <style name="Theme.EventoCompartidos.ColorLetra" parent="Theme.HosteleriApp">
+        <item name="android:textColor">@color/colorLetra</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+    </style>
 </resources>
